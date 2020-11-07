@@ -6,23 +6,24 @@ using namespace std;
 #define TableSize 8
 
 enum PieceColor { White, Black };
-enum PieceKind { KING, QUEEN, ROOK, BISHOP, KNIGHT, PAWN }; // denote the values ​​of the figures
+enum PieceKind { KING, QUEEN, ROOK, BISHOP, KNIGHT, PAWN };
 
 class Piece;
 
 struct FIELD
 {
     class Piece* placed;
-    class Piece* threats[18];
-    short ThreatsNumber;
-} **table; // table[TableSize][TableSize]
+    class Piece* threads[18];
+    short ThreadsNumber;
+} **table;
 
 class Piece
 {
 public:
-    Piece(PieceColor c, PieceKind k, struct FIELD **t) : color(c), kind(k), table(t) { position.row = -1; position.column = -1; }
+    Piece(PieceColor c, PieceKind k, short n, struct FIELD** t) : color(c), kind(k), table(t) { position.row = -1; position.column = -1; }
     PieceKind GetKind() { return kind; }
     PieceColor GetColor() { return color; }
+    short GetNumber() { return number; }
     struct POSITION
     {
         short row;
@@ -37,12 +38,13 @@ protected:
     FIELD** table;
     PieceColor color;
     PieceKind kind;
+    short number;
 }; // Piece
 
 class King : public Piece
 {
 public:
-    King(PieceColor c, PieceKind k, FIELD** t) : Piece(c, k, t) { HasBeenMoved = false; }
+    King(PieceColor c, PieceKind k, short n, FIELD** t) : Piece(c, k, n, t) { HasBeenMoved = false; }
     virtual short GetImportance() { return 32767; }
     virtual void GetPossibleMoves(struct POSITION** pos, short& n);
     virtual void MakeMove(struct POSITION pos);
@@ -59,11 +61,11 @@ bool King::CheckMove(struct POSITION pos)
     short i, row = position.row, column = position.column;
     struct FIELD field = table[pos.row][pos.column];
     if ((field.placed != NULL) && (field.placed->GetColor() == color))
-        return false; // the field is occupied by a figure of the same color
-    for (i = 0; i < field.ThreatsNumber; i++)
+        return false; // полето е заето от фигура със същия цвят
+    for (i = 0; i < field.ThreadsNumber; i++)
     {
-        if (field.threats[i]->GetColor() != color)
-            return false; // the field is threatened by a figure of the other color
+        if (field.threads[i]->GetColor() != color)
+            return false; // полето е заплашено от фигура от другия цвят
     }
     if ((abs(row - pos.row) > 1) || (abs(column - pos.column) > 1))
         return false;
@@ -98,13 +100,40 @@ void King::GetPossibleMoves(struct POSITION** pos, short& n)
 
 void King::MakeMove(struct POSITION pos)
 {
+    struct POSITION* possible = NULL;
+    struct FIELD* field;
+    short i, j, k, n;
     if ((position.row >= 0) && (position.column >= 0))
-    {
-        table[position.row][position.column].placed = NULL;
+    { // not originally placed
+        table[position.row][position.column].placed = NULL; // the cell in which the figure was became free
+        GetPossibleMoves(&possible, n);
+        for (i = 0; i < n; i++)
+        { // crawling possible moves
+            field = &(table[possible[i].row][possible[i].column]);
+            for (j = 0; j < field->ThreadsNumber; j++)
+            { // crawling cell threats
+                if (field->threads[j]->GetNumber() == number)
+                { // j - index of our figure in the array with threats
+                    // Remove the j element
+                    for (k = j; k < field->ThreadsNumber - 1; k++) {
+                        field->threads[k] = field->threads[k + 1];
+                    }                     
+                    field->ThreadsNumber -= 1;
+                    break;
+                }
+            } // for j...
+        } // for i...
         HasBeenMoved = true;
-    }
-    position = pos;
-    table[position.row][position.column].placed = this;
+    } 
+    position = pos; // the set position becomes current
+    table[position.row][position.column].placed = this; // the cell on the dashboard is occupied with the figure
+    GetPossibleMoves(&possible, n); // the possible moves (threats) from the new position
+    for (i = 0; i < n; i++)
+    { // crawling possible moves
+        field = &(table[possible[i].row][possible[i].column]);
+        // we add the pointer to our figure to the threat array
+        field->threads[field->ThreadsNumber++] = this;
+    } // for i...
 } // King::MakeMove
 
 int main()
@@ -117,13 +146,13 @@ int main()
         for (column = 0; column < TableSize; column++)
         {
             table[row][column].placed = NULL;
-            table[row][column].ThreatsNumber = 0;
+            table[row][column].ThreadsNumber = 0;
         }
-    } // for row...
+    } // for line...
     struct Piece::POSITION p;
     p.row = 3;
     p.column = 3;
-    class King k(White, KING, table);
+    class King k(White, KING, 1, table);
     k.MakeMove(p);
     struct Piece::POSITION* possible;
     short i, n;
