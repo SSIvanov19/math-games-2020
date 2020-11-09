@@ -311,7 +311,7 @@ bool Pawn::CheckMove(struct POSITION pos)
     if (pos.column == column)
     { // движение по колоната
         if (pos.row < row)
-        { // движение надолу
+        { // move down
             for (i = row - 1; i > pos.row; i--)
                 if (table[i][column].placed != NULL)
                     return false; // опит да се прескочи фигура
