@@ -8,6 +8,8 @@ using namespace std;
 //0 = WASD
 bool movementType = true;
 
+void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourthActive);
+void printSettings(bool firstActive, bool secondActive);
 
 void printLine(int row)
 {
@@ -71,17 +73,8 @@ void printLine(int row)
 		}
 	}
 }
-void NewGame()
-{
-	//Select one ot two players
-}
 
-void startGame()
-{
-	//Connection with back-end
-}
-
-void printBoard(bool isMoveActive)
+void printBoard(bool isGame)
 {
 	system("CLS");
 	cout << "    ======================================" << endl;
@@ -101,23 +94,115 @@ void printBoard(bool isMoveActive)
 		printLine(row);
 	}
 
-	if (!isMoveActive)
-	{
-		cout << "\n Commands: (N)ew Game   (R)esume Game   (S)etting   (E)xit " << endl;
-		cout << " Type here: ";
-	}
-	else
+	if (isGame)
 	{
 		if (movementType)
 		{
 		     cout << "Type coordinate: ";
+			 char ch;
+			 cin >> ch;
 		}
 		else
 		{
 			cout << "Move with WASD";
+			char ch;
+			cin >> ch;
+		}
+	}
+}
+
+void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourthActive)
+{
+	system("CLS");
+	
+	cout << "    ======================================" << endl;
+	cout << "      ______ _    _ ______  _____ _____" << endl;
+	cout << "     /  ____| |  | |  ____|/ ____/ ____|" << endl;
+	cout << "     | |    | |__| | |__  | (___| (____" << endl;
+	cout << R"(     | |    |  __  |  __|  \____ \\___ \)" << endl;
+	cout << "     | |____| |  | | |____  ____) |___) |" << endl;
+	cout << "     \\______|_|  |_|______||_____/_____/" << endl;
+	cout << endl;
+	cout << "    ======================================" << endl;
+
+	cout << endl;
+	cout << endl;
+	
+	cout << " "; if (firstActive)  cout << "-> ";  else cout << "   "; cout << "New Game " << endl;
+	cout << " "; if (secondActive)  cout << "-> ";  else cout << "   "; cout << "Resume Game" << endl;
+	cout << " "; if (thirdActive)  cout << "-> ";  else cout << "   "; cout << "Settings" << endl;
+	cout << " "; if (fourthActive)  cout << "-> ";  else cout << "   "; cout << "Exit" << endl;
+
+	const char ch = _getch();
+	
+	if (ch == 's' || ch == 'S')
+	{
+		if (firstActive)
+		{
+			printMenu(false, true, false, false);
 		}
 
-		startGame();
+		if (secondActive)
+		{
+			printMenu(false, false, true, false);
+		}
+
+		if (thirdActive)
+		{
+			printMenu(false, false, false, true);
+		}
+
+		if (fourthActive)
+		{
+			printMenu(true, false, false, false);
+		}
+	}
+
+	if (ch == 'w' || ch == 'W')
+	{
+		if (firstActive)
+		{
+			printMenu(false, false, false, true);
+		}
+
+		if (secondActive)
+		{
+			printMenu(true, false, false, false);
+		}
+
+		if (thirdActive)
+		{
+			printMenu(false, true, false, false);
+		}
+
+		if (fourthActive)
+		{
+			printMenu(false, false, true, false);
+		}
+	}
+
+	if (ch == '\r')
+	{
+		if (firstActive)
+		{
+			printBoard(true);
+		}
+
+		if (secondActive)
+		{
+			printBoard(true);
+		}
+
+		if (thirdActive)
+		{
+			printSettings(true, false);
+		}
+
+		if (fourthActive)
+		{
+			exit(3);
+		}
+
 	}
 }
 
@@ -129,14 +214,14 @@ void printSettings(bool firstActive, bool secondActive)
 	cout << "       _____ ______ _______ _______ _____ _   _  _____  _____" << endl;
 	cout << "      / ____| ____ |__   __|__   __|_   _| \\ | |/ ____|/ ____|" << endl;
 	cout << "     | (___ | |__     | |     | |    | | |  \\| | |  __| (___" << endl;
-	cout << "      \\___ \\|  __|    | |     | |    | | | . ` | | |_ |\\___ \\" << endl;
+	cout << R"(      \___ \|  __|    | |     | |    | | | . ` | | |_ |\___ \)" << endl;
 	cout << "      ____) | |____   | |     | |   _| |_| |\\  | |__| |____) |" << endl;
 	cout << "     |_____/|______|  |_|     |_|  |_____|_| \\_|\\_____|_____/" << endl;
 	cout << endl;
 	cout << "    ===========================================================" << endl;
 
-	cout << " "; if (firstActive)  cout << ". ";  else cout << "  "; cout << "Movement type: "; if (movementType)  cout << "Coordinates";  else cout << "Keyboard"; cout << endl;
-	cout << " "; if (secondActive)  cout << ". ";  else cout << "  "; cout << "Back" << endl;
+	cout << " "; if (firstActive)  cout << "-> ";  else cout << "   "; cout << "Movement type: "; if (movementType)  cout << "Coordinates";  else cout << "Keyboard"; cout << endl;
+	cout << " "; if (secondActive)  cout << "-> ";  else cout << "   "; cout << "Back" << endl;
 
 	const char ch = _getch();
 	
@@ -173,38 +258,15 @@ void printSettings(bool firstActive, bool secondActive)
 		if (secondActive)
 		{
 			//Back to menu
-			printBoard(false);
+			printMenu(true, false, false, false);
 		}
 
 	}
 }
 
-void printMenu()
+void newGame()
 {
-	const char ch = _getch();
-	cout << endl << " ";
-
-	if (ch == 'N' || ch == 'n')
-	{
-		cout << "New Game";
-		//newGame();
-	}
-	else if (ch == 'R' || ch == 'r')
-	{
-		printBoard(true);
-	}
-	else if (ch == 'S' || ch == 's')
-	{
-		printSettings(true, false);
-	}
-	else if (ch == 'E' || ch == 'e')
-	{
-		exit(3);
-	}
-	else
-	{
-		cout << "Invalid command";
-	}
+	//Select one ot two players
 }
 
 int main()
@@ -215,10 +277,8 @@ int main()
 	//0 = black
 	bool turn = true;
 
-	printBoard(false);
-
 	while (true)
 	{
-		printMenu();
+		printMenu(true, false, false, false);
 	}
 }
