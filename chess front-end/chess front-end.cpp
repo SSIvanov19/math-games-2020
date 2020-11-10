@@ -3,6 +3,22 @@
 #include<cstdlib>
 using namespace std;
 
+char board[8][8] =
+{
+	{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'},
+	{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
+	{32, 32, 32, 32, 32, 32, 32, 32},
+	{32, 32, 32, 32, 32, 32, 32, 32},
+	{32, 32, 32, 32, 32, 32, 32, 32},
+	{32, 32, 32, 32, 32, 32, 32, 32},
+	{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
+	{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'}
+};
+
+//1 = white
+//0 = black
+bool turn = true;
+
 //Setting
 //1 = coordinate
 //0 = WASD
@@ -24,9 +40,182 @@ void printLine(int row)
 			{
 				for (int subCells = 1; subCells <= 6; subCells++)
 				{
-					if (subCells == 3 && subRow == 2)
+					
+					if (row == 8 && subCells == 3 && subRow == 2 && cells == 1)
 					{
-						wcout << whiteSquare;
+						if(board[0][0] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[0][0];
+						}
+					}
+					else if (row == 8 && subCells == 3 && subRow == 2 && cells == 2)
+					{
+						if (board[0][2] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[0][2];
+						}
+					}
+					else if(row == 8 && subCells == 3 && subRow == 2 && cells == 3)
+					{
+						if (board[0][4] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[0][4];
+						}
+					}
+					else if(row == 8 && subCells == 3 && subRow == 2 && cells == 4)
+					{
+						if (board[0][6] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[0][6];
+						}
+					}
+					else if (row == 6 && subCells == 3 && subRow == 2 && cells == 1)
+					{
+						if (board[2][0] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[2][0];
+						}
+					}
+					else if (row == 6 && subCells == 3 && subRow == 2 && cells == 2)
+					{
+						if (board[2][2] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[2][2];
+						}
+					}
+					else if (row == 6 && subCells == 3 && subRow == 2 && cells == 3)
+					{
+						if (board[2][4] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[2][4];
+						}
+					}
+					else if (row == 6 && subCells == 3 && subRow == 2 && cells == 4)
+					{
+						if (board[2][6] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[2][6];
+						}
+					}
+					else if (row == 4 && subCells == 3 && subRow == 2 && cells == 1)
+					{
+						if (board[4][0] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[4][0];
+						}
+					}
+					else if (row == 4 && subCells == 3 && subRow == 2 && cells == 2)
+					{
+						if (board[4][2] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[4][2];
+						}
+					}
+					else if (row == 4 && subCells == 3 && subRow == 2 && cells == 3)
+					{
+						if (board[4][4] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[4][4];
+						}
+					}
+					else if (row == 4 && subCells == 3 && subRow == 2 && cells == 4)
+					{
+						if (board[4][6] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[4][6];
+						}
+					}
+					else if (row == 2 && subCells == 3 && subRow == 2 && cells == 1)
+					{
+						if (board[6][0] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[6][0];
+						}
+					}
+					else if (row == 2 && subCells == 3 && subRow == 2 && cells == 2)
+					{
+						if (board[6][2] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[6][2];
+						}
+					}
+					else if (row == 2 && subCells == 3 && subRow == 2 && cells == 3)
+					{
+						if (board[6][4] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[6][4];
+						}
+					}
+					else if (row == 2 && subCells == 3 && subRow == 2 && cells == 4)
+					{
+						if (board[6][6] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[6][6];
+						}
 					}
 					else
 					{
@@ -36,7 +225,186 @@ void printLine(int row)
 
 				for (int subCells = 1; subCells <= 6; subCells++)
 				{
-					cout << blackSquare;
+					if (row == 8 && subCells == 3 && subRow == 2 && cells == 1)
+					{
+						if (board[0][1] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[0][1];
+						}
+					}
+					else if (row == 8 && subCells == 3 && subRow == 2 && cells == 2)
+					{
+						if (board[0][3] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[0][3];
+						}
+					}
+					else if (row == 8 && subCells == 3 && subRow == 2 && cells == 3)
+					{
+						if (board[0][5] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[0][5];
+						}
+					}
+					else if (row == 8 && subCells == 3 && subRow == 2 && cells == 4)
+					{
+						if (board[0][7] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[0][7];
+						}
+					}
+					else if(row == 6 && subCells == 3 && subRow == 2 && cells == 1)
+					{
+						if (board[2][1] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[2][1];
+						}
+					}
+					else if (row == 6 && subCells == 3 && subRow == 2 && cells == 2)
+					{
+						if (board[2][3] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[2][3];
+						}
+					}
+					else if (row == 6 && subCells == 3 && subRow == 2 && cells == 3)
+					{
+						if (board[2][5] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[2][5];
+						}
+					}
+					else if (row == 6 && subCells == 3 && subRow == 2 && cells == 4)
+					{
+						if (board[2][7] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[2][7];
+						}
+					}
+					else if (row == 4 && subCells == 3 && subRow == 2 && cells == 1)
+					{
+						if (board[4][1] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[4][1];
+						}
+					}
+					else if (row == 4 && subCells == 3 && subRow == 2 && cells == 2)
+					{
+						if (board[4][3] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[4][3];
+						}
+					}
+					else if (row == 4 && subCells == 3 && subRow == 2 && cells == 3)
+					{
+						if (board[4][5] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[4][5];
+						}
+					}
+					else if (row == 4 && subCells == 3 && subRow == 2 && cells == 4)
+					{
+						if (board[4][7] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[4][7];
+						}
+					}
+					else if (row == 2 && subCells == 3 && subRow == 2 && cells == 1)
+					{
+						if (board[6][1] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[6][1];
+						}
+					}
+					else if (row == 2 && subCells == 3 && subRow == 2 && cells == 2)
+					{
+						if (board[6][3] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[6][3];
+						}
+					}
+					else if (row == 2 && subCells == 3 && subRow == 2 && cells == 3)
+					{
+						if (board[6][5] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[6][5];
+						}
+					}
+					else if (row == 2 && subCells == 3 && subRow == 2 && cells == 4)
+					{
+						if (board[6][7] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[6][7];
+						}
+					}
+					else
+					{
+						cout << blackSquare;
+					}
 				}
 
 			}
@@ -56,12 +424,370 @@ void printLine(int row)
 			{
 				for (int subCells = 1; subCells <= 6; subCells++)
 				{
-					cout << blackSquare;
+					if (row == 7 && subCells == 3 && subRow == 2 && cells == 1)
+					{
+						if (board[1][0] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[1][0];
+						}
+					}
+					else if (row == 7 && subCells == 3 && subRow == 2 && cells == 2)
+					{
+						if (board[1][2] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[1][2];
+						}
+					}
+					else if (row == 7 && subCells == 3 && subRow == 2 && cells == 3)
+					{
+						if (board[1][4] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[1][4];
+						}
+					}
+					else if (row == 7 && subCells == 3 && subRow == 2 && cells == 4)
+					{
+						if (board[1][6] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[1][6];
+						}
+					}
+					else if (row == 5 && subCells == 3 && subRow == 2 && cells == 1)
+					{
+						if (board[3][0] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[3][0];
+						}
+					}
+					else if (row == 5 && subCells == 3 && subRow == 2 && cells == 2)
+					{
+						if (board[3][2] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[3][2];
+						}
+					}
+					else if (row == 5 && subCells == 3 && subRow == 2 && cells == 3)
+					{
+						if (board[3][4] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[3][4];
+						}
+					}
+					else if (row == 5 && subCells == 3 && subRow == 2 && cells == 4)
+					{
+						if (board[3][6] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[3][6];
+						}
+					}
+					else if (row == 3 && subCells == 3 && subRow == 2 && cells == 1)
+					{
+						if (board[5][0] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[5][0];
+						}
+					}
+					else if (row == 3 && subCells == 3 && subRow == 2 && cells == 2)
+					{
+						if (board[5][2] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[5][2];
+						}
+					}
+					else if (row == 3 && subCells == 3 && subRow == 2 && cells == 3)
+					{
+						if (board[5][4] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[5][4];
+						}
+					}
+					else if (row == 3 && subCells == 3 && subRow == 2 && cells == 4)
+					{
+						if (board[5][6] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[5][6];
+						}
+					}
+					else if (row == 1 && subCells == 3 && subRow == 2 && cells == 1)
+					{
+						if (board[7][0] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[7][0];
+						}
+					}
+					else if (row == 1 && subCells == 3 && subRow == 2 && cells == 2)
+					{
+						if (board[7][2] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[7][2];
+						}
+					}
+					else if (row == 1 && subCells == 3 && subRow == 2 && cells == 3)
+					{
+						if (board[7][4] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[7][4];
+						}
+					}
+					else if (row == 1 && subCells == 3 && subRow == 2 && cells == 4)
+					{
+						if (board[7][6] == 32)
+						{
+							cout << blackSquare;
+						}
+						else
+						{
+							cout << board[7][6];
+						}
+					}
+					else
+					{
+						cout << blackSquare;
+					}
 				}
 
 				for (int subCells = 1; subCells <= 6; subCells++)
 				{
-					cout << whiteSquare;
+					if (row == 7 && subCells == 3 && subRow == 2 && cells == 1)
+					{
+						if (board[1][1] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[1][1];
+						}
+					}
+					else if (row == 7 && subCells == 3 && subRow == 2 && cells == 2)
+					{
+						if (board[1][3] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[1][3];
+						}
+					}
+					else if (row == 7 && subCells == 3 && subRow == 2 && cells == 3)
+					{
+						if (board[1][5] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[1][5];
+						}
+					}
+					else if (row == 7 && subCells == 3 && subRow == 2 && cells == 4)
+					{
+						if (board[1][7] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[1][7];
+						}
+					}
+					else if (row == 5 && subCells == 3 && subRow == 2 && cells == 1)
+					{
+						if (board[3][1] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[3][1];
+						}
+					}
+					else if (row == 5 && subCells == 3 && subRow == 2 && cells == 2)
+					{
+						if (board[3][3] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[3][3];
+						}
+					}
+					else if (row == 5 && subCells == 3 && subRow == 2 && cells == 3)
+					{
+						if (board[3][5] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[3][5];
+						}
+					}
+					else if (row == 5 && subCells == 3 && subRow == 2 && cells == 4)
+					{
+						if (board[3][7] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[3][7];
+						}
+					}
+					else if (row == 3 && subCells == 3 && subRow == 2 && cells == 1)
+					{
+						if (board[5][1] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[5][1];
+						}
+					}
+					else if (row == 3 && subCells == 3 && subRow == 2 && cells == 2)
+					{
+						if (board[5][3] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[5][3];
+						}
+					}
+					else if (row == 3 && subCells == 3 && subRow == 2 && cells == 3)
+					{
+						if (board[5][5] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[5][5];
+						}
+					}
+					else if (row == 3 && subCells == 3 && subRow == 2 && cells == 4)
+					{
+						if (board[5][7] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[5][7];
+						}
+					}
+					else if (row == 1 && subCells == 3 && subRow == 2 && cells == 1)
+					{
+						if (board[7][1] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[7][1];
+						}
+					}
+					else if (row == 1 && subCells == 3 && subRow == 2 && cells == 2)
+					{
+						if (board[7][3] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[7][3];
+						}
+					}
+					else if (row == 1 && subCells == 3 && subRow == 2 && cells == 3)
+					{
+						if (board[7][5] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[7][5];
+						}
+					}
+					else if (row == 1 && subCells == 3 && subRow == 2 && cells == 4)
+					{
+						if (board[7][7] == 32)
+						{
+							cout << whiteSquare;
+						}
+						else
+						{
+							cout << board[7][7];
+						}
+					}
+					else
+					{
+						cout << whiteSquare;
+					}
 				}
 			}
 			if (subRow == 2)
@@ -99,14 +825,13 @@ void printBoard(bool isGame)
 		if (movementType)
 		{
 		     cout << "Type coordinate: ";
-			 char ch;
-			 cin >> ch;
+			 const char ch = _getch();
+			 int num = _getch();	 
 		}
 		else
 		{
 			cout << "Move with WASD";
-			char ch;
-			cin >> ch;
+			const char ch = _getch();
 		}
 	}
 }
@@ -271,11 +996,7 @@ void newGame()
 
 int main()
 {
-	char board[8][8];
 
-	//1 = white
-	//0 = black
-	bool turn = true;
 
 	while (true)
 	{
