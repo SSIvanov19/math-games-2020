@@ -253,7 +253,7 @@ bool Rook::CheckMove(struct POSITION pos)
         else
         { // движение нагоре
             for (i = row + 1; i < pos.row; i++)
-                if (table[row][i].placed != NULL)
+                if (table[i][column].placed != NULL)
                     return false; // опит да се прескочи фигура
         }
     } // движение по колоната
@@ -301,30 +301,28 @@ bool Pawn::CheckMove(struct POSITION pos)
     if ((pos.row < 0) || (pos.row >= TableSize) || (pos.column < 0) || (pos.column >= TableSize))
         return false;
     short i, row = position.row, column = position.column;
-    if ((row == pos.row) && (column == pos.column))
-        return false;
-    class Piece* destination = table[pos.row][pos.column].placed;
-    if ((destination != NULL) && (destination->GetColor() == color))
-        return false; // ход на поле заето от фигура със същия цвят
-    if ((pos.row != row) && (pos.column != column))
-        return false;
-    if (pos.column == column)
-    { // движение по колоната
-        if (pos.row < row)
-        { // move down
-            for (i = row - 1; i > pos.row; i--)
-                if (table[i][column].placed != NULL)
-                    return false; // опит да се прескочи фигура
-        }
-        else
-        { // движение нагоре
-            for (i = row + 1; i < pos.row; i++)
-                if (table[row][i].placed != NULL)
-                    return false; // опит да се прескочи фигура
-        }
-    } // движение по колоната
+    struct FIELD field = table[pos.row][pos.column];
+    if ((field.placed != NULL) && (field.placed->GetColor() == color))
+        return false; // полето е заето от фигура със същия цвят
+    for (i = 0; i < field.ThreadsNumber; i++)
+    {
+        if (field.threads[i]->GetColor() != color)
+            return false; // полето е заплашено от фигура от другия цвят
+    }
+    if (HasBeenMoved) {
+        if (abs(column - pos.column) > 2)
+            return false;
+        if (column == pos.column)
+            return false;
+    }
+    else {
+        if (abs(column - pos.column) > 1)
+            return false;
+        if (column == pos.column)
+            return false;
+    }
     return true;
-} // Rook::CheckMove
+} // Pawn::CheckMove
 
 void Pawn::GetPossibleMoves(struct POSITION** pos, short& n)
 {
@@ -332,12 +330,13 @@ void Pawn::GetPossibleMoves(struct POSITION** pos, short& n)
     struct POSITION current;
     short i;
     n = 0;
-    current.column = position.column;
-    for (current.row = 0; current.row < TableSize; current.row++)
+    current.row = position.row;
+    for (current.column = 0; current.column < TableSize; current.column++)
     {
         if (CheckMove(current))
             positions[n++] = current;
     }
+    current.column = position.column;
     if (n > 0)
     {
         *pos = new POSITION[n];
@@ -348,7 +347,128 @@ void Pawn::GetPossibleMoves(struct POSITION** pos, short& n)
         *pos = NULL;
 } // Pawn::GetPossibleMoves
 
+// Figure Bishop
 
+void Bishop::MakeMove(struct POSITION pos)
+{
+    Piece::MakeMove(pos);
+    HasBeenMoved = true;
+} // Bishop::MakeMove
+
+bool Bishop::CheckMove(struct POSITION pos)
+{
+    if ((pos.row < 0) || (pos.row >= TableSize) || (pos.column < 0) || (pos.column >= TableSize))
+        return false;
+    short i, row = position.row, column = position.column;
+    struct FIELD field = table[pos.row][pos.column];
+    if ((field.placed != NULL) && (field.placed->GetColor() == color))
+        return false; // полето е заето от фигура със същия цвят
+    for (i = 0; i < field.ThreadsNumber; i++)
+    {
+        if (field.threads[i]->GetColor() != color)
+            return false; // полето е заплашено от фигура от другия цвят
+    }
+
+    if ((abs(row - pos.row) > 1) || (abs(column - pos.column) > 1))
+        return false;
+    if ((row == pos.row) && (column == pos.column))
+        return false;
+
+    return true;
+} // Bishop::CheckMove
+
+void Bishop::GetPossibleMoves(struct POSITION** pos, short& n)
+{
+    struct POSITION positions[13];
+    struct POSITION current;
+    short i;
+    n = 0;
+    current.row = position.row;
+    for (current.column = 0; current.column < TableSize; current.column++)
+    {
+        if (CheckMove(current))
+            positions[n++] = current;
+    }
+    current.column = position.column;
+    if (n > 0)
+    {
+        *pos = new POSITION[n];
+        for (i = 0; i < n; i++)
+            (*pos)[i] = positions[i];
+    }
+    else
+        *pos = NULL;
+} // Bishop::GetPossibleMoves
+
+void printLine(int row)
+{
+    const char whiteSquare = 0xDB;
+    const char blackSquare = 0xFF;
+
+    if (row % 2 == 0)
+    {
+        for (int subRow = 1; subRow <= 3; subRow++)
+        {
+            for (int cells = 1; cells <= 4; cells++)
+            {
+                for (int subCells = 1; subCells <= 6; subCells++)
+                {
+                    if (subCells == 3 && subRow == 2)
+                    {
+                        cout << whiteSquare;
+                    }
+                    else
+                    {
+                        cout << whiteSquare;
+                    }
+                }
+
+                for (int subCells = 1; subCells <= 6; subCells++)
+                {
+                    cout << blackSquare;
+                }
+            }
+
+            if (subRow == 2)
+            {
+                cout << "   " << row;
+            }
+            cout << endl << " ";
+        }
+    }
+    if (row % 2 != 0)
+    {
+        for (int subRow = 1; subRow <= 3; subRow++)
+        {
+            for (int cells = 1; cells <= 4; cells++)
+            {
+                for (int subCells = 1; subCells <= 6; subCells++)
+                {
+                    cout << blackSquare;
+                }
+
+                for (int subCells = 1; subCells <= 6; subCells++)
+                {
+                    cout << whiteSquare;
+                }
+            }
+            if (subRow == 2)
+            {
+                cout << "   " << row;
+            }
+
+            cout << endl << " ";
+        }
+    }
+}
+
+void printBoard()
+{
+    for (int row = 8; row >= 1; row--)
+    {
+        printLine(row);
+    }
+}
 
 int main()
 {
@@ -364,14 +484,17 @@ int main()
         }
     } // for line...
 
+    cout << " ";
+    printBoard();
+
     struct Piece::POSITION p;
+    struct Piece::POSITION* possible;
+    short i, n;
 
     p.row = 4;
     p.column = 0;
     class King k(White, KING, 1, table);
     k.MakeMove(p);
-    struct Piece::POSITION* possible;
-    short i, n;
     possible = NULL;
     k.GetPossibleMoves(&possible, n);
     cout << "King: n = " << n << endl;
@@ -399,4 +522,5 @@ int main()
     cout << "Pawn: n = " << n << endl;
     for (i = 0; i < n; i++)
         cout << "row: " << possible[i].row << ", column: " << possible[i].column << endl;
+
 }
