@@ -35,12 +35,23 @@ bool turn = true;
 //Setting
 //1 = coordinate
 //0 = WASD
-bool movementType = true;
+bool movementType = false;
 
 void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourthActive);
 void printSettings(bool firstActive, bool secondActive);
 void printLine(int row);
 void printBoard(bool isGame);
+
+void initCellsMatrix()
+{
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			cellsMatrix[i][j] = false;
+		}
+	}
+}
 
 void printLine(int row)
 {
@@ -122,7 +133,7 @@ void printLine(int row)
 					}
 					else
 					{
-						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY);
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 					}
 					
 					if (row == 8 && subCells == 3 && subRow == 2 && cells == 1)
@@ -305,7 +316,7 @@ void printLine(int row)
 					{
 						cout << whiteSquare;
 					}
-					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY);
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 				}
 
 				for (int subCells = 1; subCells <= 6; subCells++)
@@ -376,7 +387,7 @@ void printLine(int row)
 					}
 					else
 					{
-						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY);
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 					}
 					
 					if (row == 8 && subCells == 3 && subRow == 2 && cells == 1)
@@ -559,13 +570,13 @@ void printLine(int row)
 					{
 						cout << blackSquare;
 					}
-					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY);
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 				}
 
 			}
 			if (subRow == 2)
 			{
-				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY);
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 				cout << "   " << row;
 			}
 			
@@ -647,7 +658,7 @@ void printLine(int row)
 					}
 					else
 					{
-						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY);
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 					}
 					
 					if (row == 7 && subCells == 3 && subRow == 2 && cells == 1)
@@ -830,7 +841,7 @@ void printLine(int row)
 					{
 						cout << blackSquare;
 					}
-					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY);
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 				}
 
 				
@@ -902,7 +913,7 @@ void printLine(int row)
 					}
 					else
 					{
-						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY);
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 					}
 					
 					if (row == 7 && subCells == 3 && subRow == 2 && cells == 1)
@@ -1089,17 +1100,17 @@ void printLine(int row)
 			}
 			if (subRow == 2)
 			{
-				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY);
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 				cout << "   " << row;
 			}
 			
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY);
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 			cout << endl << " ";
 		}
 	}
 }
 
-void printBoard(bool isGame)
+void printBoard(bool firstGame)
 {
 	system("CLS");
 	cout << "    ======================================" << endl;
@@ -1114,119 +1125,193 @@ void printBoard(bool isGame)
 	cout << "\n Current turn: WHITE";
 	cout << "\n\n   A     B     C     D     E     F     G     H\n\n ";
 
+	if (firstGame && !movementType)
+	{
+		cellsMatrix[0][0] = true;
+	}
+	
 	for (int row = 8; row >= 1; row--)
 	{
 		printLine(row);
 	}
 
-	if (isGame)
-	{
-		if (movementType)
-		{
-			int x = 0;
-			int y = 0;
-		    cout << "Type coordinate: ";
-			
-			const char ch = _getch();
-			
-			if (ch == '\x1b')
-			{
-				printMenu(true, false, false, false);
-			}
-			
-			const int num = (int)((char)_getch() - '0');
-			
-			if (ch == 'A' || ch == 'a')
-		    {
-				y = 0;
-		    }
-			else if (ch =='B' || ch == 'b')
-			{
-				y = 1;
-			}
-			else if (ch == 'C' || ch == 'c')
-			{
-				y = 2;
-			}
-			else if (ch == 'D' || ch == 'd')
-			{
-				y = 3;
-			}
-			else if (ch == 'E' || ch == 'e')
-			{
-				y = 4;
-			}
-			else if (ch == 'F' || ch == 'f')
-			{
-				y = 5;
-			}
-			else if (ch == 'G' || ch == 'g')
-			{
-				y = 6;
-			}
-			else if (ch == 'H' || ch == 'h')
-			{
-				y = 7;
-			}
-			else
-			{
-				printBoard(true);
-			}
 
-			if (num == 8)
+	if (movementType)
+	{
+		int x = 0;
+		int y = 0;
+	    cout << "Type coordinate: ";
+			
+		const char ch = _getch();
+			
+		if (ch == '\x1b')
+		{
+			initCellsMatrix();
+			printMenu(true, false, false, false);
+		}
+		
+		const int num = (int)((char)_getch() - '0');
+		
+		if (ch == 'A' || ch == 'a')
+		{
+			y = 0;
+		}
+		else if (ch =='B' || ch == 'b')
+		{
+			y = 1;
+		}
+		else if (ch == 'C' || ch == 'c')
+		{
+			y = 2;
+		}
+		else if (ch == 'D' || ch == 'd')
+		{
+			y = 3;
+		}
+		else if (ch == 'E' || ch == 'e')
+		{
+			y = 4;
+		}
+		else if (ch == 'F' || ch == 'f')
+		{
+			y = 5;
+		}
+		else if (ch == 'G' || ch == 'g')
+		{
+			y = 6;
+		}
+		else if (ch == 'H' || ch == 'h')
+		{
+			y = 7;
+		}
+		else
+		{
+			printBoard(false);
+		}
+
+		if (num == 8)
+		{
+			x = 0;
+		}
+		else if (num == 7)
+		{
+			x = 1;
+		}
+		else if (num == 6)
+		{
+			x = 2;
+		}
+		else if (num == 5)
+		{
+			x = 3;
+		}
+		else if (num == 4)
+		{
+			x = 4;
+		}
+		else if (num == 3)
+		{
+			x = 5;
+		}
+		else if (num == 2)
+		{
+			x = 6;
+		}
+		else if (num == 1)
+		{
+			x = 7;
+		}
+		else
+		{
+			printBoard(false);
+		}
+			
+		initCellsMatrix();
+
+		cellsMatrix[x][y] = true;
+
+		printBoard(false);
+	}
+	else
+	{
+		int x = 0;
+		int y = 0;
+			
+		cout << "Move with WASD";
+
+		const char ch = _getch();
+
+		if (ch == '\x1b')
+		{
+			initCellsMatrix();
+			printMenu(true, false, false, false);
+		}
+
+		for (int i = 0; i < 8; ++i)
+		{
+			for (int j = 0; j < 8; ++j)
 			{
-				x = 0;
+				if (cellsMatrix[i][j])
+				{
+					cellsMatrix[i][j] = false;
+					x = i;
+					y = j;
+				}
 			}
-			else if (num == 7)
-			{
-				x = 1;
-			}
-			else if (num == 6)
-			{
-				x = 2;
-			}
-			else if (num == 5)
-			{
-				x = 3;
-			}
-			else if (num == 4)
-			{
-				x = 4;
-			}
-			else if (num == 3)
-			{
-				x = 5;
-			}
-			else if (num == 2)
-			{
-				x = 6;
-			}
-			else if (num == 1)
+		}
+			
+		if (ch == 'w')
+		{
+			if (x == 0)
 			{
 				x = 7;
 			}
 			else
 			{
-				printBoard(true);
+				x--;
 			}
-
-			for (int i = 0; i < 8; i++)
+		}
+		else if (ch == 's')
+		{
+			if (x == 7)
 			{
-				for (int j = 0; j < 8; j++)
-				{
-					cellsMatrix[i][j] = false;
-				}
+				x = 0;
 			}
-
-			cellsMatrix[x][y] = true;
-
-			printBoard(true);
+			else
+			{
+				x++;
+			}
+		}
+		else if (ch == 'a')
+		{
+			if (y == 0)
+			{
+				y = 7;
+			}
+			else
+			{
+				y--;
+			}
+		}
+		else if (ch == 'd')
+		{
+			if (y == 7)
+			{
+				y = 0;
+			}
+			else
+			{
+				y++;
+			}
 		}
 		else
 		{
-			cout << "Move with WASD";
-			const char ch = _getch();
+			printBoard(false);
 		}
+
+		cellsMatrix[x][y] = true;
+
+		printBoard(false);
 	}
 }
 
@@ -1390,6 +1475,8 @@ void newGame()
 
 int main()
 {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+	
 	while (true)
 	{
 		printMenu(true, false, false, false);
