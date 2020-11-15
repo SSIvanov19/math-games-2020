@@ -1,6 +1,7 @@
-﻿#include<iostream>
-#include<conio.h>
+﻿#include<conio.h>
 #include<cstdlib>
+#include<iostream>
+#include <Windows.h>
 using namespace std;
 
 char board[8][8] =
@@ -15,6 +16,18 @@ char board[8][8] =
 	{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'}
 };
 
+bool cellsMatrix[8][8] =
+{
+	{false, false, false, false, false, false, false, false},
+	{false, false, false, false, false, false, false, false},
+	{false, false, false, false, false, false, false, false},
+	{false, false, false, false, false, false, false, false},
+	{false, false, false, false, false, false, false, false},
+	{false, false, false, false, false, false, false, false},
+	{false, false, false, false, false, false, false, false},
+	{false, false, false, false, false, false, false, false},
+};
+
 //1 = white
 //0 = black
 bool turn = true;
@@ -22,16 +35,29 @@ bool turn = true;
 //Setting
 //1 = coordinate
 //0 = WASD
-bool movementType = true;
+bool movementType = false;
 
 void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourthActive);
 void printSettings(bool firstActive, bool secondActive);
+void printLine(int row);
+void printBoard(bool isGame);
+
+void initCellsMatrix()
+{
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			cellsMatrix[i][j] = false;
+		}
+	}
+}
 
 void printLine(int row)
 {
 	const char whiteSquare = 0xDB;
 	const char blackSquare = 0xFF;
-
+	
 	if (row % 2 == 0)
 	{
 		for (int subRow = 1; subRow <= 3; subRow++)
@@ -40,6 +66,75 @@ void printLine(int row)
 			{
 				for (int subCells = 1; subCells <= 6; subCells++)
 				{
+				
+					if (row == 8 && cellsMatrix[0][0] && cells == 1)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 8 && cellsMatrix[0][2] && cells == 2)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if(row == 8 && cellsMatrix[0][4] && cells == 3)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 8 && cellsMatrix[0][6] && cells == 4)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if(row == 6 && cellsMatrix[2][0] && cells == 1)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 6 && cellsMatrix[2][2] && cells == 2)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 6 && cellsMatrix[2][4] && cells == 3)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 6 && cellsMatrix[2][6] && cells == 4)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 4 && cellsMatrix[4][0] && cells == 1)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 4 && cellsMatrix[4][2] && cells == 2)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 4 && cellsMatrix[4][4] && cells == 3)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 4 && cellsMatrix[4][6] && cells == 4)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 2 && cellsMatrix[6][0] && cells == 1)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 2 && cellsMatrix[6][2] && cells == 2)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 2 && cellsMatrix[6][4] && cells == 3)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 2 && cellsMatrix[6][6] && cells == 4)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+					}
 					
 					if (row == 8 && subCells == 3 && subRow == 2 && cells == 1)
 					{
@@ -221,10 +316,80 @@ void printLine(int row)
 					{
 						cout << whiteSquare;
 					}
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 				}
 
 				for (int subCells = 1; subCells <= 6; subCells++)
 				{
+					if (row == 8 && cellsMatrix[0][1] && cells == 1)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 8 && cellsMatrix[0][3] && cells == 2)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 8 && cellsMatrix[0][5] && cells == 3)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 8 && cellsMatrix[0][7] && cells == 4)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 6 && cellsMatrix[2][1] && cells == 1)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 6 && cellsMatrix[2][3] && cells == 2)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 6 && cellsMatrix[2][5] && cells == 3)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 6 && cellsMatrix[2][7] && cells == 4)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 4 && cellsMatrix[4][1] && cells == 1)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 4 && cellsMatrix[4][3] && cells == 2)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 4 && cellsMatrix[4][5] && cells == 3)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 4 && cellsMatrix[4][7] && cells == 4)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 2 && cellsMatrix[6][1] && cells == 1)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 2 && cellsMatrix[6][3] && cells == 2)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 2 && cellsMatrix[6][5] && cells == 3)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 2 && cellsMatrix[6][7] && cells == 4)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+					}
+					
 					if (row == 8 && subCells == 3 && subRow == 2 && cells == 1)
 					{
 						if (board[0][1] == 32)
@@ -405,14 +570,16 @@ void printLine(int row)
 					{
 						cout << blackSquare;
 					}
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 				}
 
 			}
 			if (subRow == 2)
 			{
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 				cout << "   " << row;
 			}
-
+			
 			cout << endl << " ";
 		}
 	}
@@ -424,6 +591,76 @@ void printLine(int row)
 			{
 				for (int subCells = 1; subCells <= 6; subCells++)
 				{
+					
+					if (row == 7 && cellsMatrix[1][0] && cells == 1)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 7 && cellsMatrix[1][2] && cells == 2)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 7 && cellsMatrix[1][4] && cells == 3)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 7 && cellsMatrix[1][6] && cells == 4)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 5 && cellsMatrix[3][0] && cells == 1)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 5 && cellsMatrix[3][2] && cells == 2)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 5 && cellsMatrix[3][4] && cells == 3)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 5 && cellsMatrix[3][6] && cells == 4)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 3 && cellsMatrix[5][0] && cells == 1)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 3 && cellsMatrix[5][2] && cells == 2)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 3 && cellsMatrix[5][4] && cells == 3)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 3 && cellsMatrix[5][6] && cells == 4)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 1 && cellsMatrix[7][0] && cells == 1)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 1 && cellsMatrix[7][2] && cells == 2)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 1 && cellsMatrix[7][4] && cells == 3)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else if (row == 1 && cellsMatrix[7][6] && cells == 4)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
+					}
+					else
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+					}
+					
 					if (row == 7 && subCells == 3 && subRow == 2 && cells == 1)
 					{
 						if (board[1][0] == 32)
@@ -604,10 +841,81 @@ void printLine(int row)
 					{
 						cout << blackSquare;
 					}
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 				}
 
+				
 				for (int subCells = 1; subCells <= 6; subCells++)
 				{
+					if (row == 7 && cellsMatrix[1][1] && cells == 1)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 7 && cellsMatrix[1][3] && cells == 2)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 7 && cellsMatrix[1][5] && cells == 3)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 7 && cellsMatrix[1][7] && cells == 4)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 5 && cellsMatrix[3][1] && cells == 1)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 5 && cellsMatrix[3][3] && cells == 2)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 5 && cellsMatrix[3][5] && cells == 3)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 5 && cellsMatrix[3][7] && cells == 4)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 3 && cellsMatrix[5][1] && cells == 1)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 3 && cellsMatrix[5][3] && cells == 2)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 3 && cellsMatrix[5][5] && cells == 3)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 3 && cellsMatrix[5][7] && cells == 4)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 1 && cellsMatrix[7][1] && cells == 1)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 1 && cellsMatrix[7][3] && cells == 2)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 1 && cellsMatrix[7][5] && cells == 3)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else if (row == 1 && cellsMatrix[7][7] && cells == 4)
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+					}
+					else
+					{
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+					}
+					
 					if (row == 7 && subCells == 3 && subRow == 2 && cells == 1)
 					{
 						if (board[1][1] == 32)
@@ -792,15 +1100,17 @@ void printLine(int row)
 			}
 			if (subRow == 2)
 			{
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 				cout << "   " << row;
 			}
-
+			
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 			cout << endl << " ";
 		}
 	}
 }
 
-void printBoard(bool isGame)
+void printBoard(bool firstGame)
 {
 	system("CLS");
 	cout << "    ======================================" << endl;
@@ -815,24 +1125,193 @@ void printBoard(bool isGame)
 	cout << "\n Current turn: WHITE";
 	cout << "\n\n   A     B     C     D     E     F     G     H\n\n ";
 
+	if (firstGame && !movementType)
+	{
+		cellsMatrix[0][0] = true;
+	}
+	
 	for (int row = 8; row >= 1; row--)
 	{
 		printLine(row);
 	}
 
-	if (isGame)
+
+	if (movementType)
 	{
-		if (movementType)
+		int x = 0;
+		int y = 0;
+	    cout << "Type coordinate: ";
+			
+		const char ch = _getch();
+			
+		if (ch == '\x1b')
 		{
-		     cout << "Type coordinate: ";
-			 const char ch = _getch();
-			 int num = _getch();	 
+			initCellsMatrix();
+			printMenu(true, false, false, false);
+		}
+		
+		const int num = (int)((char)_getch() - '0');
+		
+		if (ch == 'A' || ch == 'a')
+		{
+			y = 0;
+		}
+		else if (ch =='B' || ch == 'b')
+		{
+			y = 1;
+		}
+		else if (ch == 'C' || ch == 'c')
+		{
+			y = 2;
+		}
+		else if (ch == 'D' || ch == 'd')
+		{
+			y = 3;
+		}
+		else if (ch == 'E' || ch == 'e')
+		{
+			y = 4;
+		}
+		else if (ch == 'F' || ch == 'f')
+		{
+			y = 5;
+		}
+		else if (ch == 'G' || ch == 'g')
+		{
+			y = 6;
+		}
+		else if (ch == 'H' || ch == 'h')
+		{
+			y = 7;
 		}
 		else
 		{
-			cout << "Move with WASD";
-			const char ch = _getch();
+			printBoard(false);
 		}
+
+		if (num == 8)
+		{
+			x = 0;
+		}
+		else if (num == 7)
+		{
+			x = 1;
+		}
+		else if (num == 6)
+		{
+			x = 2;
+		}
+		else if (num == 5)
+		{
+			x = 3;
+		}
+		else if (num == 4)
+		{
+			x = 4;
+		}
+		else if (num == 3)
+		{
+			x = 5;
+		}
+		else if (num == 2)
+		{
+			x = 6;
+		}
+		else if (num == 1)
+		{
+			x = 7;
+		}
+		else
+		{
+			printBoard(false);
+		}
+			
+		initCellsMatrix();
+
+		cellsMatrix[x][y] = true;
+
+		printBoard(false);
+	}
+	else
+	{
+		int x = 0;
+		int y = 0;
+			
+		cout << "Move with WASD";
+
+		const char ch = _getch();
+
+		if (ch == '\x1b')
+		{
+			initCellsMatrix();
+			printMenu(true, false, false, false);
+		}
+
+		for (int i = 0; i < 8; ++i)
+		{
+			for (int j = 0; j < 8; ++j)
+			{
+				if (cellsMatrix[i][j])
+				{
+					cellsMatrix[i][j] = false;
+					x = i;
+					y = j;
+				}
+			}
+		}
+			
+		if (ch == 'w')
+		{
+			if (x == 0)
+			{
+				x = 7;
+			}
+			else
+			{
+				x--;
+			}
+		}
+		else if (ch == 's')
+		{
+			if (x == 7)
+			{
+				x = 0;
+			}
+			else
+			{
+				x++;
+			}
+		}
+		else if (ch == 'a')
+		{
+			if (y == 0)
+			{
+				y = 7;
+			}
+			else
+			{
+				y--;
+			}
+		}
+		else if (ch == 'd')
+		{
+			if (y == 7)
+			{
+				y = 0;
+			}
+			else
+			{
+				y++;
+			}
+		}
+		else
+		{
+			printBoard(false);
+		}
+
+		cellsMatrix[x][y] = true;
+
+		printBoard(false);
 	}
 }
 
@@ -996,8 +1475,8 @@ void newGame()
 
 int main()
 {
-
-
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+	
 	while (true)
 	{
 		printMenu(true, false, false, false);
