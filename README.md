@@ -2,10 +2,10 @@
 A basic chess program made in vanilla C++.
 
 # Participants
-Atanas Pozharliev - [ABPozharliev19](https://github.com/ABPozharliev19) - Code Checker
-Stoyan Ivanov - [SSIvanov19](https://github.com/SSIvanov19) - Front - End Developer
-Stas Uzunov - [SSUzunov19](https://github.com/SSUzunov19) - C++ Developer
-Stefan Hristov - [SHHristov19](https://github.com/SHHristov19) - Scrum Trainer
+Atanas Pozharliev - [ABPozharliev19](https://github.com/ABPozharliev19) - Code Checker  
+Stoyan Ivanov - [SSIvanov19](https://github.com/SSIvanov19) - Front - End Developer  
+Stas Uzunov - [SSUzunov19](https://github.com/SSUzunov19) - C++ Developer  
+Stefan Hristov - [SHHristov19](https://github.com/SHHristov19) - Scrum Trainer  
 
 # Installation
 ```bash
