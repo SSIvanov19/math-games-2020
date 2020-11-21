@@ -20,10 +20,11 @@ struct FIELD
 class Piece
 {
 public:
-    Piece(PieceColor c, PieceKind k, short n, short row, short column, struct FIELD** t) : color(c), kind(k), number(n), table(t) { position.row = row; position.column = column; }
+    Piece(PieceColor c, PieceKind k, short n, char l, struct FIELD** t) : color(c), kind(k), number(n), letter(l), table(t) { position.row = -1; position.column = -1; }
     PieceKind GetKind() { return kind; }
     PieceColor GetColor() { return color; }
     short GetNumber() { return number; }
+    short GetLetter() { return letter; }
     struct POSITION
     {
         short row;
@@ -39,12 +40,13 @@ protected:
     PieceColor color;
     PieceKind kind;
     short number;
+    char letter;
 }; // Piece
 
 class King : public Piece
 {
 public:
-    King(PieceColor c, PieceKind k, short n, short row, short column, FIELD** t) : Piece(c, k, n, row, column, t) { HasBeenMoved = false; }
+    King(PieceColor c, PieceKind k, short n, short row, short column, FIELD** t) : Piece(c, k, n, 'K', t), HasBeenMoved(false) { struct POSITION pos; pos.row = row; pos.column = column; MakeMove(pos); }
     virtual short GetImportance() { return 32767; }
     virtual void GetPossibleMoves(struct POSITION** pos, short& n);
     virtual void MakeMove(struct POSITION pos);
@@ -57,7 +59,7 @@ private:
 class Rook : public Piece
 {
 public:
-    Rook(PieceColor c, PieceKind k, short n, short row, short column, FIELD** t) : Piece(c, k, n, row, column, t) { HasBeenMoved = false; }
+    Rook(PieceColor c, PieceKind k, short n, short row, short column, FIELD** t) : Piece(c, k, n, 'R', t), HasBeenMoved(false) { struct POSITION pos; pos.row = row; pos.column = column; MakeMove(pos); }
     virtual short GetImportance() { return 5; }
     virtual void GetPossibleMoves(struct POSITION** pos, short& n);
     virtual void MakeMove(struct POSITION pos);
@@ -70,23 +72,24 @@ private:
 class Pawn : public Piece
 {
 public:
-    Pawn(PieceColor c, PieceKind k, short n, short row, short column, FIELD** t) : Piece(c, k, n, row, column, t) { HasBeenMoved = false; }
+    Pawn(PieceColor c, PieceKind k, short n, short row, short column, FIELD** t) : Piece(c, k, n, 'P', t), HasBeenMoved(false), LongMoveHasBeenPerformed(false) { struct POSITION pos; pos.row = row; pos.column = column; MakeMove(pos); }
     virtual short GetImportance() { return 1; }
     virtual void GetPossibleMoves(struct POSITION** pos, short& n);
     virtual void MakeMove(struct POSITION pos);
+    bool GetLongMoveHasBeenPerformed() { return LongMoveHasBeenPerformed; }
 protected:
     virtual bool CheckMove(struct POSITION pos);
 private:
     bool HasBeenMoved;
+    bool LongMoveHasBeenPerformed;
 }; // Pawn
 
 class Queen : public Piece
 {
 public:
-    Queen(PieceColor c, PieceKind k, short n, short row, short column, FIELD** t) : Piece(c, k, n, row, column, t) { }
+    Queen(PieceColor c, PieceKind k, short n, short row, short column, FIELD** t) : Piece(c, k, n, 'Q', t) { struct POSITION pos; pos.row = row; pos.column = column; MakeMove(pos); }
     virtual short GetImportance() { return 9; }
     virtual void GetPossibleMoves(struct POSITION** pos, short& n);
-    virtual void MakeMove(struct POSITION pos);
 protected:
     virtual bool CheckMove(struct POSITION pos);
 }; // Queen
@@ -94,10 +97,9 @@ protected:
 class Bishop : public Piece
 {
 public:
-    Bishop(PieceColor c, PieceKind k, short n, short row, short column, FIELD** t) : Piece(c, k, n, row, column, t) { }
+    Bishop(PieceColor c, PieceKind k, short n, short row, short column, FIELD** t) : Piece(c, k, n, 'B', t) { struct POSITION pos; pos.row = row; pos.column = column; MakeMove(pos); }
     virtual short GetImportance() { return 3; }
     virtual void GetPossibleMoves(struct POSITION** pos, short& n);
-    virtual void MakeMove(struct POSITION pos);
 protected:
     virtual bool CheckMove(struct POSITION pos);
 }; // Bishop
@@ -105,10 +107,9 @@ protected:
 class Knight : public Piece
 {
 public:
-    Knight(PieceColor c, PieceKind k, short n, short row, short column, FIELD** t) : Piece(c, k, n, row, column, t) { }
+    Knight(PieceColor c, PieceKind k, short n, short row, short column, FIELD** t) : Piece(c, k, n, 'N', t) { struct POSITION pos; pos.row = row; pos.column = column; MakeMove(pos); }
     virtual short GetImportance() { return 3; }
     virtual void GetPossibleMoves(struct POSITION** pos, short& n);
-    virtual void MakeMove(struct POSITION pos);
 protected:
     virtual bool CheckMove(struct POSITION pos);
 }; // Knight
@@ -127,11 +128,13 @@ bool Piece::CheckMove(struct POSITION pos)
 
 void Piece::MakeMove(struct POSITION pos)
 {
+    cout << "Piece::MakeMove" << endl;
     struct POSITION* possible = NULL;
     struct FIELD* field;
     short i, j, k, n;
     if ((position.row >= 0) && (position.column >= 0))
     { // не е първоначално поставяне
+        cout << "removing threads" << endl;
         table[position.row][position.column].placed = NULL; // клетката, в която е била фигурата става празна
         GetPossibleMoves(&possible, n);
         for (i = 0; i < n; i++)
@@ -150,21 +153,25 @@ void Piece::MakeMove(struct POSITION pos)
             } // for j...
         } // for i...
     }
+    cout << "placing the figure" << endl;
     position = pos; // текуща става зададената позиция
     table[position.row][position.column].placed = this; // клетката от таблото е заета с фигурата
     GetPossibleMoves(&possible, n); // възможните ходове (заплахите) от новата позиция
+    cout << n << " possible moves was found" << endl;
     for (i = 0; i < n; i++)
     { // обхождане на възможните ходове
         field = &(table[possible[i].row][possible[i].column]);
         // добавяне на указателя към нашата фигура към масива със заплахите
         field->threads[field->ThreadsNumber++] = this;
     } // for i...
+    cout << "end of Piece::MakeMove" << endl;
 } // Piece::MakeMove
 
 // Figure King
 
 void King::MakeMove(struct POSITION pos)
 {
+    cout << "King::MakeMove" << endl;
     Piece::MakeMove(pos);
     HasBeenMoved = true;
 } // King::MakeMove
@@ -187,6 +194,7 @@ bool King::CheckMove(struct POSITION pos)
 
 void King::GetPossibleMoves(struct POSITION** pos, short& n)
 {
+    cout << "King::GetPossibleMoves" << endl;
     struct POSITION positions[8];
     struct POSITION current;
     short i;
@@ -207,6 +215,7 @@ void King::GetPossibleMoves(struct POSITION** pos, short& n)
     }
     else
         *pos = NULL;
+    cout << "end of King::GetPossibleMoves" << endl;
 } // King::GetPossibleMoves
 
 // Figure Rook
@@ -289,6 +298,8 @@ void Rook::GetPossibleMoves(struct POSITION** pos, short& n)
 
 void Pawn::MakeMove(struct POSITION pos)
 {
+    if (abs(position.column - pos.column) > 1)
+        LongMoveHasBeenPerformed = true;
     Piece::MakeMove(pos);
     HasBeenMoved = true;
 } // Pawn::MakeMove
@@ -297,25 +308,52 @@ bool Pawn::CheckMove(struct POSITION pos)
 {
     if (!Piece::CheckMove(pos))
         return false;
-    short i, row = position.row, column = position.column;
-    struct FIELD field = table[pos.row][pos.column];
-    for (i = 0; i < field.ThreadsNumber; i++)
+    class Piece* AnotherFigure;
+    short i, jump, ColumnDistance, row = position.row, column = position.column;
+    i = abs(row - pos.row);
+    if (i > 1)
+        return false;
+    ColumnDistance = abs(column - pos.column);
+    if (i == 1)
     {
-        if (field.threads[i]->GetColor() != color)
-            return false; // полето е заплашено от фигура от другия цвят
+        if (ColumnDistance > 1)
+            return false;
+        AnotherFigure = table[pos.row][pos.column].placed;
+        if ((AnotherFigure == NULL) || (AnotherFigure->GetColor() == color))
+            return false; // полето не  е заето или там стои фигура от същия цвят
+        if (ColumnDistance == 0)
+            if (AnotherFigure->GetKind() == PAWN)
+            { // пасианс
+                class Pawn* AnotherPawn = dynamic_cast<class Pawn*>(AnotherFigure);
+                if (!AnotherPawn->GetLongMoveHasBeenPerformed())
+                    return false; // другата пешка не е правила ход през поле
+            }
+            else
+                return false; // другата фигура не е пешка
     }
-    if (HasBeenMoved) {
-        if (abs(column - pos.column) > 2)
+    else
+    { // ход без вземане на фигура
+        jump = (HasBeenMoved) ? 1 : 2; // с колко колони може да е ходът
+        if (ColumnDistance > jump)
             return false;
-        if (column == pos.column)
-            return false;
+        if (color == White)
+        {
+            if (pos.column <= column)
+                return false;
+            for (i = column + 1; i <= pos.column; i++)
+                if (table[row][i].placed != NULL)
+                    return false; //по пътя има фигура
+        }
+        else
+        { // color != White
+            if (column <= pos.column)
+                return false;
+            for (i = column - 1; i >= pos.column; i--)
+                if (table[row][i].placed != NULL)
+                    return false; //по пътя има фигура
+        }
     }
-    else {
-        if (abs(column - pos.column) > 1)
-            return false;
-        if (column == pos.column)
-            return false;
-    }
+
     return true;
 } // Pawn::CheckMove
 
@@ -348,7 +386,7 @@ bool Bishop::CheckMove(struct POSITION pos)
 {
     if (!Piece::CheckMove(pos))
         return false;
-    short i, row = position.row, column = position.column;
+    short i, j, row = position.row, column = position.column;
     struct FIELD field = table[pos.row][pos.column];
     for (i = 0; i < field.ThreadsNumber; i++)
     {
@@ -356,8 +394,28 @@ bool Bishop::CheckMove(struct POSITION pos)
             return false; // полето е заплашено от фигура от другия цвят
     }
 
-    if ((abs(row - pos.row) > 1) || (abs(column - pos.column) > 1))
-        return false;
+    if (abs(row - pos.row) == abs(column - pos.column)) {
+        if ((pos.row > row) && (pos.column > column)) {
+            for (i = row + 1, j = column + 1; i < pos.row, j < pos.column; i++, j++)
+                if (table[i][j].placed != NULL)
+                    return false; // опит да се прескочи фигура
+        }
+        else {
+            for (i = row - 1, j = column - 1; i > pos.row, j > pos.column; i--, j--)
+                if (table[i][j].placed != NULL)
+                    return false; // опит да се прескочи фигура
+        }
+        if ((pos.row > row) && (pos.column < column)) {
+            for (i = row + 1, j = column - 1; i < pos.row, j > pos.column; i++, j--)
+                if (table[i][j].placed != NULL)
+                    return false; // опит да се прескочи фигура
+        }
+        else {
+            for (i = row - 1, j = column + 1; i > pos.row, j < pos.column; i--, j++)
+                if (table[i][j].placed != NULL)
+                    return false; // опит да се прескочи фигура
+        }
+    }
 
     return true;
 } // Bishop::CheckMove
@@ -398,12 +456,10 @@ bool Knight::CheckMove(struct POSITION pos)
         if (field.threads[i]->GetColor() != color)
             return false; // полето е заплашено от фигура от другия цвят
     }
-    if (abs(row - pos.row) > 2)
-        if (abs(column - pos.column) > 1)
-            return false;
-    if (abs(column - pos.column) > 2)
-        if (abs(row - pos.row) > 1)
-            return false;
+    if (abs(row - pos.row) > 2 && abs(column - pos.column) > 1)
+        return false;
+    if (abs(column - pos.column) > 2 && (abs(row - pos.row) > 1))
+        return false;
     return true;
 } // King::CheckMove
 
@@ -437,7 +493,7 @@ bool Queen::CheckMove(struct POSITION pos)
 {
     if (!Piece::CheckMove(pos))
         return false;
-    short i, row = position.row, column = position.column;
+    short i, j, row = position.row, column = position.column;
     if ((pos.row != row) && (pos.column != column))
         return false;
     if (pos.row == row)
@@ -470,6 +526,30 @@ bool Queen::CheckMove(struct POSITION pos)
                     return false; // опит да се прескочи фигура
         }
     } // движение по колоната
+
+    if (abs(row - pos.row) == abs(column - pos.column)) {
+        if ((pos.row > row) && (pos.column > column)) {
+            for (i = row + 1, j = column + 1; i < pos.row, j < pos.column; i++, j++)
+                if (table[i][j].placed != NULL)
+                    return false; // опит да се прескочи фигура
+        }
+        else {
+            for (i = row - 1, j = column - 1; i > pos.row, j > pos.column; i--, j--)
+                if (table[i][j].placed != NULL)
+                    return false; // опит да се прескочи фигура
+        }
+        if ((pos.row > row) && (pos.column < column)) {
+            for (i = row + 1, j = column - 1; i < pos.row, j > pos.column; i++, j--)
+                if (table[i][j].placed != NULL)
+                    return false; // опит да се прескочи фигура
+        }
+        else {
+            for (i = row - 1, j = column + 1; i > pos.row, j < pos.column; i--, j++)
+                if (table[i][j].placed != NULL)
+                    return false; // опит да се прескочи фигура
+        }
+    }
+
     return true;
 } // Queen::CheckMove
 
@@ -592,43 +672,47 @@ int main()
     short i, n;
 
     possible = NULL;
- 
+
     class Piece* WhiteFigures[16];
     WhiteFigures[0] = new class King(White, KING, 1, 4, 0, table);
-    WhiteFigures[1] = new class Queen(White, QUEEN, 1, 3, 0, table);
-    WhiteFigures[2] = new class Rook(White, ROOK, 2, 7, 0, table);
-    WhiteFigures[3] = new class Rook(White, ROOK, 3, 0, 0, table);
-    WhiteFigures[4] = new class Bishop(White, BISHOP, 4, 2, 0, table);
-    WhiteFigures[5] = new class Bishop(White, BISHOP, 5, 5, 0, table);
-    WhiteFigures[6] = new class Knight(White, KNIGHT, 6, 1, 0, table);
-    WhiteFigures[7] = new class Knight(White, KNIGHT, 7, 6, 0, table);
+    cout << "King - OK" << endl;
+    WhiteFigures[1] = new class Queen(White, QUEEN, 2, 3, 0, table);
+    cout << "Queen - OK" << endl;
+    WhiteFigures[2] = new class Rook(White, ROOK, 3, 7, 0, table);
+    WhiteFigures[3] = new class Rook(White, ROOK, 4, 0, 0, table);
+    cout << "Rooks - OK" << endl;
+    WhiteFigures[4] = new class Bishop(White, BISHOP, 5, 2, 0, table);
+    cout << "black " << int(WhiteFigures[4]->GetLetter()) << " number of possible  moves:" << endl;
+    WhiteFigures[5] = new class Bishop(White, BISHOP, 6, 5, 0, table);
+    cout << "Bishops - OK" << endl;
+    WhiteFigures[6] = new class Knight(White, KNIGHT, 7, 1, 0, table);
+    WhiteFigures[7] = new class Knight(White, KNIGHT, 8, 6, 0, table);
+    cout << "Knights - OK" << endl;
+    /*
     for (i = 8; i < 16; i++)
-        WhiteFigures[i] = new class Pawn(White, PAWN, i, i - 8 , 1, table);
+        WhiteFigures[i] = new class Pawn(White, PAWN, i + 1, i - 8, 1, table);
+    cout << "Pawns - OK" << endl;
+    /*
 
     delete possible;
     possible = NULL;
     WhiteFigures[0]->GetPossibleMoves(&possible, n);
 
     class Piece* BlackFigures[16];
-    BlackFigures[0] = new class King(White, KING, 1, 4, 7, table);
-    BlackFigures[1] = new class Queen(White, QUEEN, 1, 3, 7, table);
-    BlackFigures[2] = new class Rook(White, ROOK, 2, 7, 7, table);
-    BlackFigures[3] = new class Rook(White, ROOK, 3, 0, 7, table);
-    BlackFigures[4] = new class Bishop(White, BISHOP, 4, 2, 7, table);
-    BlackFigures[5] = new class Bishop(White, BISHOP, 5, 5, 7, table);
-    BlackFigures[6] = new class Knight(White, KNIGHT, 6, 1, 7, table);
-    BlackFigures[7] = new class Knight(White, KNIGHT, 7, 6, 7, table);
+    BlackFigures[0] = new class King(White, KING, 17, 4, 7, table);
+    BlackFigures[1] = new class Queen(White, QUEEN, 18, 3, 7, table);
+    BlackFigures[2] = new class Rook(White, ROOK, 19, 7, 7, table);
+    BlackFigures[3] = new class Rook(White, ROOK, 20, 0, 7, table);
+    BlackFigures[4] = new class Bishop(White, BISHOP, 21, 2, 7, table);
+    BlackFigures[5] = new class Bishop(White, BISHOP, 22, 5, 7, table);
+    BlackFigures[6] = new class Knight(White, KNIGHT, 23, 1, 7, table);
+    BlackFigures[7] = new class Knight(White, KNIGHT, 24, 6, 7, table);
     for (i = 8; i < 16; i++)
-        BlackFigures[i] = new class Pawn(White, PAWN, i, i - 8, 6, table);
+        BlackFigures[i] = new class Pawn(White, PAWN, i + 17, i - 8, 6, table);
 
-    delete possible;
-    possible = NULL;
-    BlackFigures[0]->GetPossibleMoves(&possible, n);
-
-    /*
-    cout << "King: n = " << n << endl;
+    BlackFigures[8]->GetPossibleMoves(&possible, n);
+    cout << "black " << BlackFigures[8]->GetLetter() << " number of possible  moves:" << n << endl;
     for (i = 0; i < n; i++)
         cout << "row: " << possible[i].row << ", column: " << possible[i].column << endl;
     */
-
 }
