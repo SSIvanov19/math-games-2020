@@ -32,6 +32,10 @@ bool cellsMatrix[8][8] =
 //0 = black
 bool turn = true;
 
+bool selectFirst = false;
+int saveX;
+int saveY;
+
 //Setting
 //1 = coordinate
 //0 = WASD
@@ -41,6 +45,20 @@ void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourt
 void printSettings(bool firstActive, bool secondActive);
 void printLine(int row);
 void printBoard(bool isGame);
+
+//This is where code need to check
+bool MakeCalculation(int prevX, int prevY, int x, int y, char ch)
+{
+	//This is where code need to check
+	if (true)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 
 void initCellsMatrix()
 {
@@ -1149,6 +1167,41 @@ void printBoard(bool firstGame)
 			initCellsMatrix();
 			printMenu(true, false, false, false);
 		}
+
+		for (int i = 0; i < 8; ++i)
+		{
+			for (int j = 0; j < 8; ++j)
+			{
+				if (cellsMatrix[i][j])
+				{
+					cellsMatrix[i][j] = false;
+					x = i;
+					y = j;
+				}
+			}
+		}
+		
+		if (ch == '\r')
+		{
+			if (!selectFirst)
+			{
+				saveX = x;
+				saveY = y;
+				selectFirst = true;
+				cellsMatrix[x][y] = true;
+				printBoard(false);
+			}
+			else
+			{
+				if (MakeCalculation(saveX, saveY, x, y, board[x][y]))
+				{
+					swap(board[saveX][saveY], board[x][y]);
+					selectFirst = false;
+					cellsMatrix[x][y] = true;
+					printBoard(false);
+				}
+			}
+		}
 		
 		const int num = (int)((char)_getch() - '0');
 		
@@ -1302,6 +1355,23 @@ void printBoard(bool firstGame)
 			else
 			{
 				y++;
+			}
+		}
+		else if (ch == '\r')
+		{
+			if (!selectFirst)
+			{
+				saveX = x;
+				saveY = y;
+				selectFirst = true;
+			}
+			else
+			{
+				if (MakeCalculation(saveX, saveY, x, y, board[x][y]))
+				{
+					swap(board[saveX][saveY], board[x][y]);
+					selectFirst = false;
+				}
 			}
 		}
 		else
