@@ -24,7 +24,7 @@ And you are done!
 #### Once you choose _New Game_ from the menu, you are directed to the board
 - If you have chosen to play with keyboard your board will look like this :
 ![Move with WASD](https://i.imgur.com/RtWheIN.png)
--If you have chosen to play by typing the coordinates your board will look like this :
+- If you have chosen to play by typing the coordinates your board will look like this :
 ![Move with coordinates](https://i.imgur.com/yBqmQOF.png)
 ### After you have played a little your board may or may not look like this one :
 ![Example Board](https://i.imgur.com/73g90iI.png)
