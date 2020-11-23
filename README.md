@@ -17,7 +17,7 @@ And you are done!
 ![General UI.](https://i.imgur.com/eEUCXiW.png)
 - You can use _New Game_ to start a new Chess game
 - You can use _Resume Game_ to resume the game that you already have started
-- You can use _Settings_ to choose whether you want to play with your keyboard or with your mouse
+- You can use _Settings_ to choose whether you want to play with your keyboard or by typing coordinates 
 ![Settings UI](https://i.imgur.com/dPnmitw.png)
 - You can use _Exit_ to exit the program
 # Usage 
