@@ -1,5 +1,5 @@
 # MathGames2020
-A basic chess program made in vanilla C++.
+### A basic chess program made in vanilla C++.
 
 # Participants
 Atanas Pozharliev - [ABPozharliev19](https://github.com/ABPozharliev19) - Code Checker  
@@ -20,8 +20,13 @@ And you are done!
 - You can use _Settings_ to choose whether you want to play with your keyboard or with your mouse
 ![Settings UI](https://i.imgur.com/dPnmitw.png)
 - You can use _Exit_ to exit the program
-   
-
 # Usage 
+#### Once you choose _New Game_ from the menu, you are directed to the board
+- If you have chosen to play with keyboard your board will look like this :
+![Move with WASD](https://i.imgur.com/RtWheIN.png)
+-If you have chosen to play by typing the coordinates your board will look like this :
+![Move with coordinates](https://i.imgur.com/yBqmQOF.png)
+### After you have played a little your board may or may not look like this one :
+![Example Board](https://i.imgur.com/73g90iI.png)
 
 
