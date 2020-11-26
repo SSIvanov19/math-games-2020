@@ -4,6 +4,8 @@
 #include <Windows.h>
 using namespace std;
 
+//Two-dimensional array that hold 
+//all pieces and their places
 char board[8][8] =
 {
 	{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'},
@@ -16,6 +18,8 @@ char board[8][8] =
 	{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'}
 };
 
+//Two-dimensional array that hold
+//if cell is selected
 bool cellsMatrix[8][8] =
 {
 	{false, false, false, false, false, false, false, false},
@@ -28,26 +32,37 @@ bool cellsMatrix[8][8] =
 	{false, false, false, false, false, false, false, false},
 };
 
+
+//Bool to check for turns
 //1 = white
 //0 = black
 bool turn = true;
 
+
+//variable for coordination system
 bool selectFirst = false;
+
+//variable for coordination system
 int saveX;
+
+//variable for coordination system
 int saveY;
 
+//variable for coordination system
 //Setting
 //1 = coordinate
 //0 = WASD
 bool movementType = false;
 
+//All function are global declare for easier access
 void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourthActive);
 void printSettings(bool firstActive, bool secondActive);
 void printLine(int row);
 void printBoard(bool isGame);
+void newGame();
 
 //This is where code need to check
-bool MakeCalculation(int prevX, int prevY, int x, int y, char ch)
+bool checkPos(int prevX, int prevY, int x, int y, char ch)
 {
 	//This is where code need to check
 	if (true)
@@ -60,6 +75,8 @@ bool MakeCalculation(int prevX, int prevY, int x, int y, char ch)
 	}
 }
 
+//Make all element of arr
+//equal false
 void initCellsMatrix()
 {
 	for (int i = 0; i < 8; i++)
@@ -71,11 +88,15 @@ void initCellsMatrix()
 	}
 }
 
+//Print one line
 void printLine(int row)
 {
+	//variables for two types of squares
 	const char whiteSquare = 0xDB;
 	const char blackSquare = 0xFF;
-	
+
+
+	//check if row is even
 	if (row % 2 == 0)
 	{
 		for (int subRow = 1; subRow <= 3; subRow++)
@@ -84,7 +105,8 @@ void printLine(int row)
 			{
 				for (int subCells = 1; subCells <= 6; subCells++)
 				{
-				
+					//For white squares
+					//Chnage color to green, if active
 					if (row == 8 && cellsMatrix[0][0] && cells == 1)
 					{
 						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
@@ -153,7 +175,8 @@ void printLine(int row)
 					{
 						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 					}
-					
+
+					//print sign, if there is
 					if (row == 8 && subCells == 3 && subRow == 2 && cells == 1)
 					{
 						if(board[0][0] == 32)
@@ -337,6 +360,8 @@ void printLine(int row)
 					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 				}
 
+				//For black squares
+				//Chnage color to green, if active
 				for (int subCells = 1; subCells <= 6; subCells++)
 				{
 					if (row == 8 && cellsMatrix[0][1] && cells == 1)
@@ -407,7 +432,8 @@ void printLine(int row)
 					{
 						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 					}
-					
+
+					//print sign, if there is
 					if (row == 8 && subCells == 3 && subRow == 2 && cells == 1)
 					{
 						if (board[0][1] == 32)
@@ -594,6 +620,7 @@ void printLine(int row)
 			}
 			if (subRow == 2)
 			{
+				//print line number
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 				cout << "   " << row;
 			}
@@ -609,7 +636,8 @@ void printLine(int row)
 			{
 				for (int subCells = 1; subCells <= 6; subCells++)
 				{
-					
+					//For black squares
+					//Chnage color to green, if active
 					if (row == 7 && cellsMatrix[1][0] && cells == 1)
 					{
 						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_GREEN);
@@ -678,7 +706,8 @@ void printLine(int row)
 					{
 						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 					}
-					
+
+					//print sign if active
 					if (row == 7 && subCells == 3 && subRow == 2 && cells == 1)
 					{
 						if (board[1][0] == 32)
@@ -862,7 +891,8 @@ void printLine(int row)
 					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 				}
 
-				
+				//For white squares
+				//Chnage color to green, if active
 				for (int subCells = 1; subCells <= 6; subCells++)
 				{
 					if (row == 7 && cellsMatrix[1][1] && cells == 1)
@@ -933,7 +963,8 @@ void printLine(int row)
 					{
 						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 					}
-					
+
+					//print if there is sign
 					if (row == 7 && subCells == 3 && subRow == 2 && cells == 1)
 					{
 						if (board[1][1] == 32)
@@ -1128,9 +1159,13 @@ void printLine(int row)
 	}
 }
 
+//Print the board
 void printBoard(bool firstGame)
 {
+	//Clear screen
 	system("CLS");
+	
+	//print the name of the game
 	cout << "    ======================================" << endl;
 	cout << "      ______ _    _ ______  _____ _____" << endl;
 	cout << "     /  ____| |  | |  ____|/ ____/ ____|" << endl;
@@ -1143,31 +1178,39 @@ void printBoard(bool firstGame)
 	cout << "\n Current turn: WHITE";
 	cout << "\n\n   A     B     C     D     E     F     G     H\n\n ";
 
+	//if it is first game
+	//put first square to green
 	if (firstGame && !movementType)
 	{
 		cellsMatrix[0][0] = true;
 	}
-	
+
+	//print each line
 	for (int row = 8; row >= 1; row--)
 	{
 		printLine(row);
 	}
 
-
+	//check if movement type is
+	//coordinates or WASD
 	if (movementType)
 	{
+		//Coordinates
 		int x = 0;
 		int y = 0;
 	    cout << "Type coordinate: ";
-			
+
+		//Get coordinates
 		const char ch = _getch();
-			
+
+		//Return to main menu
 		if (ch == '\x1b')
 		{
 			initCellsMatrix();
 			printMenu(true, false, false, false);
 		}
 
+		//make all element false and save the final coordinates 
 		for (int i = 0; i < 8; ++i)
 		{
 			for (int j = 0; j < 8; ++j)
@@ -1180,9 +1223,12 @@ void printBoard(bool firstGame)
 				}
 			}
 		}
-		
+
+
+		//check input
 		if (ch == '\r')
 		{
+			//pick up piece
 			if (!selectFirst)
 			{
 				saveX = x;
@@ -1193,7 +1239,8 @@ void printBoard(bool firstGame)
 			}
 			else
 			{
-				if (MakeCalculation(saveX, saveY, x, y, board[x][y]))
+				//check and place the two pieces 
+				if (checkPos(saveX, saveY, x, y, board[x][y]))
 				{
 					swap(board[saveX][saveY], board[x][y]);
 					selectFirst = false;
@@ -1202,9 +1249,11 @@ void printBoard(bool firstGame)
 				}
 			}
 		}
-		
+
+		//Get the second coordinate
 		const int num = (int)((char)_getch() - '0');
-		
+
+		//From char to coordinates
 		if (ch == 'A' || ch == 'a')
 		{
 			y = 0;
@@ -1239,9 +1288,11 @@ void printBoard(bool firstGame)
 		}
 		else
 		{
+			//if input is incorrect print board
 			printBoard(false);
 		}
 
+		//From numbers to coordinates
 		if (num == 8)
 		{
 			x = 0;
@@ -1287,19 +1338,27 @@ void printBoard(bool firstGame)
 	}
 	else
 	{
+		//WASD movement
+		
+		//coordinate for x
 		int x = 0;
+
+		//coordinate for y
 		int y = 0;
 			
 		cout << "Move with WASD";
 
+		//Get char
 		const char ch = _getch();
 
+		//Return to menu
 		if (ch == '\x1b')
 		{
 			initCellsMatrix();
 			printMenu(true, false, false, false);
 		}
 
+		//make all element false and save the final coordinates 
 		for (int i = 0; i < 8; ++i)
 		{
 			for (int j = 0; j < 8; ++j)
@@ -1312,7 +1371,8 @@ void printBoard(bool firstGame)
 				}
 			}
 		}
-			
+
+		//make sure the y and x aren't out of bounds
 		if (ch == 'w')
 		{
 			if (x == 0)
@@ -1359,6 +1419,7 @@ void printBoard(bool firstGame)
 		}
 		else if (ch == '\r')
 		{
+			//Pick up piece
 			if (!selectFirst)
 			{
 				saveX = x;
@@ -1367,7 +1428,8 @@ void printBoard(bool firstGame)
 			}
 			else
 			{
-				if (MakeCalculation(saveX, saveY, x, y, board[x][y]))
+				//Check and place piece
+				if (checkPos(saveX, saveY, x, y, board[x][y]))
 				{
 					swap(board[saveX][saveY], board[x][y]);
 					selectFirst = false;
@@ -1385,10 +1447,13 @@ void printBoard(bool firstGame)
 	}
 }
 
+//Print the menu
 void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourthActive)
 {
+	//Clear screen
 	system("CLS");
-	
+
+	//print the name of the game
 	cout << "    ======================================" << endl;
 	cout << "      ______ _    _ ______  _____ _____" << endl;
 	cout << "     /  ____| |  | |  ____|/ ____/ ____|" << endl;
@@ -1401,14 +1466,17 @@ void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourt
 
 	cout << endl;
 	cout << endl;
-	
+
+	//Check which choice is active
 	cout << " "; if (firstActive)  cout << "-> ";  else cout << "   "; cout << "New Game " << endl;
 	cout << " "; if (secondActive)  cout << "-> ";  else cout << "   "; cout << "Resume Game" << endl;
 	cout << " "; if (thirdActive)  cout << "-> ";  else cout << "   "; cout << "Settings" << endl;
 	cout << " "; if (fourthActive)  cout << "-> ";  else cout << "   "; cout << "Exit" << endl;
 
+	//Get ch
 	const char ch = _getch();
-	
+
+	//Change active choice
 	if (ch == 's' || ch == 'S')
 	{
 		if (firstActive)
@@ -1432,6 +1500,7 @@ void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourt
 		}
 	}
 
+	//Change active choice
 	if (ch == 'w' || ch == 'W')
 	{
 		if (firstActive)
@@ -1455,35 +1524,44 @@ void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourt
 		}
 	}
 
+	//Check for enter
 	if (ch == '\r')
 	{
 		if (firstActive)
 		{
+			//New game and print board
+			newGame();
 			printBoard(true);
 		}
 
 		if (secondActive)
 		{
+			//Print board
 			printBoard(true);
 		}
 
 		if (thirdActive)
 		{
+			//Print Settings
 			printSettings(true, false);
 		}
 
 		if (fourthActive)
 		{
+			//Exit the game
 			exit(3);
 		}
 
 	}
 }
 
+//Print the settings
 void printSettings(bool firstActive, bool secondActive)
 {
+	//Clear screen
 	system("CLS");
-	 
+
+	//Print the settings
 	cout << "    ===========================================================" << endl;
 	cout << "       _____ ______ _______ _______ _____ _   _  _____  _____" << endl;
 	cout << "      / ____| ____ |__   __|__   __|_   _| \\ | |/ ____|/ ____|" << endl;
@@ -1494,11 +1572,14 @@ void printSettings(bool firstActive, bool secondActive)
 	cout << endl;
 	cout << "    ===========================================================" << endl;
 
+	//Check which choice is active
 	cout << " "; if (firstActive)  cout << "-> ";  else cout << "   "; cout << "Movement type: "; if (movementType)  cout << "Coordinates";  else cout << "Keyboard"; cout << endl;
 	cout << " "; if (secondActive)  cout << "-> ";  else cout << "   "; cout << "Back" << endl;
 
+	//Get ch
 	const char ch = _getch();
-	
+
+	//Change active choice
 	if (ch == 's' || ch == 'S' || ch == 'w' || ch == 'W')
 	{
 		if (secondActive)
@@ -1512,6 +1593,8 @@ void printSettings(bool firstActive, bool secondActive)
 		}
 	}
 
+
+	//Check for enter
 	if (ch == '\r')
 	{
 		if (firstActive)
@@ -1525,7 +1608,8 @@ void printSettings(bool firstActive, bool secondActive)
 			{
 				movementType = true;
 			}
-			
+
+			//print settings
 			printSettings(true, false);
 		}
 		
@@ -1540,13 +1624,35 @@ void printSettings(bool firstActive, bool secondActive)
 
 void newGame()
 {
-	//Select one ot two players
+	//Standard board
+	char standardBoard[8][8] =
+	{
+		{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'},
+		{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
+		{32, 32, 32, 32, 32, 32, 32, 32},
+		{32, 32, 32, 32, 32, 32, 32, 32},
+		{32, 32, 32, 32, 32, 32, 32, 32},
+		{32, 32, 32, 32, 32, 32, 32, 32},
+		{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
+		{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'}
+	};
+
+	//Make active board same as standart
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			board[i][j] = standardBoard[i][j];
+		}
+	}
 }
 
 int main()
 {
+	//Set text to white
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
-	
+
+	//Print menu
 	while (true)
 	{
 		printMenu(true, false, false, false);
