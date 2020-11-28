@@ -21,6 +21,7 @@ class Piece
 {
 public:
     Piece(PieceColor c, PieceKind k, short n, char l, struct FIELD** t) : color(c), kind(k), number(n), letter(l), table(t) { position.row = -1; position.column = -1; }
+    ~Piece() { RemoveThreat(); }
     PieceKind GetKind() { return kind; }
     PieceColor GetColor() { return color; }
     short GetNumber() { return number; }
@@ -36,6 +37,8 @@ public:
     virtual void MakeMove(struct POSITION pos);
 protected:
     virtual bool CheckMove(struct POSITION pos);
+    void AddThreat(struct POSITION pos);
+    void RemoveThreat();
     struct POSITION position;
     FIELD** table;
     PieceColor color;
@@ -127,45 +130,55 @@ bool Piece::CheckMove(struct POSITION pos)
     return true;
 } // Piece::CheckMove
 
-void Piece::MakeMove(struct POSITION pos)
+void Piece::AddThreat(struct POSITION pos)
+{ //  прави съответните полета заплашени от фигурата
+    struct POSITION* possible = NULL;
+    struct FIELD* field;
+    short i, n;
+    table[position.row][position.column].placed = this; // клетката от таблото е заета с фигурата
+    GetPossibleMoves(&possible, n); // възможните ходове (заплахите) от новата позиция
+    for (i = 0; i < n; i++)
+        if ((kind != PAWN) || (possible[i].row != pos.row)) // пешката не заплашва полето от същия ред
+        { // обхождане на възможните ходове
+            field = &(table[possible[i].row][possible[i].column]);
+            // добавяне на указателя към нашата фигура към масива със заплахите
+            field->threads[field->ThreadsNumber++] = this;
+        } // for i...
+} // Piece::AddThreat
+
+void Piece::RemoveThreat()
 {
-    //cout << "Piece::MakeMove" << endl;
     struct POSITION* possible = NULL;
     struct FIELD* field;
     short i, j, k, n;
     if ((position.row >= 0) && (position.column >= 0))
     { // не е първоначално поставяне
-        //cout << "removing threads" << endl;
         table[position.row][position.column].placed = NULL; // клетката, в която е била фигурата става празна
         GetPossibleMoves(&possible, n);
         for (i = 0; i < n; i++)
-        { // обхождане на възможните ходове
-            field = &(table[possible[i].row][possible[i].column]);
-            for (j = 0; j < field->ThreadsNumber; j++)
-            { //обхождане на заплахите за клетката
-                if (field->threads[j]->GetNumber() == number)
-                { // j - индекс на нашата фигура в масива със заплахите
-                    // премахваме j-тия елемент
-                    for (k = j; k < field->ThreadsNumber - 1; k++)
-                        field->threads[k] = field->threads[k + 1];
-                    field->ThreadsNumber -= 1;
-                    break;
-                }
-            } // for j...
-        } // for i...
+            if ((kind != PAWN) || (possible[i].row != position.row)) // пешката не заплашва полето от същия ред
+            { // обхождане на възможните ходове
+                field = &(table[possible[i].row][possible[i].column]);
+                for (j = 0; j < field->ThreadsNumber; j++)
+                { //обхождане на заплахите за клетката
+                    if (field->threads[j]->GetNumber() == number)
+                    { // j - индекс на премахваната фигура в масива със заплахите
+                        // премахваме j-тия елемент
+                        for (k = j; k < field->ThreadsNumber - 1; k++)
+                            field->threads[k] = field->threads[k + 1];
+                        field->ThreadsNumber -= 1;
+                        break;
+                    }
+                } // for j...
+            } // for i...
     }
-    //cout << "placing the figure" << endl;
+} // Piece::RemoveThreat
+
+void Piece::MakeMove(struct POSITION pos)
+{ // прави ход
+    RemoveThreat();
     position = pos; // текуща става зададената позиция
-    table[position.row][position.column].placed = this; // клетката от таблото е заета с фигурата
-    GetPossibleMoves(&possible, n); // възможните ходове (заплахите) от новата позиция
-    //cout << n << " possible moves was found" << endl;
-    for (i = 0; i < n; i++)
-    { // обхождане на възможните ходове
-        field = &(table[possible[i].row][possible[i].column]);
-        // добавяне на указателя към нашата фигура към масива със заплахите
-        field->threads[field->ThreadsNumber++] = this;
-    } // for i...
-    //cout << "end of Piece::MakeMove" << endl;
+    AddThreat(pos);
 } // Piece::MakeMove
 
 // Figure King
@@ -484,64 +497,44 @@ bool Queen::CheckMove(struct POSITION pos)
 {
     if (!Piece::CheckMove(pos))
         return false;
-    short i, j, row = position.row, column = position.column;
-    if ((pos.row != row) && (pos.column != column))
-        return false;
-    if (pos.row == row)
-    { // движение по реда
-        if (pos.column < column)
-        { // движение наляво
-            for (i = column - 1; i > pos.column; i--)
-                if (table[row][i].placed != NULL)
-                    return false; // опит да се прескочи фигура
-        }
-        else
-        { // движение надясно
-            for (i = column + 1; i < pos.column; i++)
-                if (table[row][i].placed != NULL)
-                    return false; // опит да се прескочи фигура
-        }
-    } // движение по реда
-    if (pos.column == column)
-    { // движение по колоната
-        if (pos.row < row)
-        { // движение надолу
-            for (i = row - 1; i > pos.row; i--)
-                if (table[i][column].placed != NULL)
-                    return false; // опит да се прескочи фигура
-        }
-        else
-        { // движение нагоре
-            for (i = row + 1; i < pos.row; i++)
-                if (table[i][column].placed != NULL)
-                    return false; // опит да се прескочи фигура
-        }
-    } // движение по колоната
+    short step, RowStep, ColumnStep, row = position.row, column = position.column;
 
-    if (abs(row - pos.row) == abs(column - pos.column)) {
-        if ((pos.row > row) && (pos.column > column)) {
-            for (i = row + 1, j = column + 1; i < pos.row, j < pos.column; i++, j++)
-                if (table[i][j].placed != NULL)
-                    return false; // опит да се прескочи фигура
-        }
-        else {
-            for (i = row - 1, j = column - 1; i > pos.row, j > pos.column; i--, j--)
-                if (table[i][j].placed != NULL)
-                    return false; // опит да се прескочи фигура
-        }
-        if ((pos.row > row) && (pos.column < column)) {
-            for (i = row + 1, j = column - 1; i < pos.row, j > pos.column; i++, j--)
-                if (table[i][j].placed != NULL)
-                    return false; // опит да се прескочи фигура
-        }
-        else {
-            for (i = row - 1, j = column + 1; i > pos.row, j < pos.column; i--, j++)
-                if (table[i][j].placed != NULL)
-                    return false; // опит да се прескочи фигура
-        }
+    // ход по диагонал:
+    if ((row + column == pos.row + pos.column) || (row - column == pos.row - pos.column))
+    { // полето, на което е фигурата и това, на което се прави ход са на еди и същ диагонал,
+// проверка дали няма фигура на полетата между това, на което е фигурата и това, на което се прави ход
+        RowStep = (pos.row > row) ? 1 : -1;
+        ColumnStep = (pos.column > column) ? 1 : -1;
+        for (row += RowStep, column += ColumnStep; table[row][column].placed == NULL; row += RowStep, column += ColumnStep)
+        {
+            if (row == pos.row)
+                return true;
+        } // for ...
+        return false; // опит да се прескочи фигура
     }
 
-    return true;
+    if (row == pos.row)
+    { // ход по реда: 
+        step = (pos.column > column) ? 1 : -1;
+        for (column += step; table[row][column].placed == NULL; column += step)
+        {
+            if (column == pos.column)
+                return true;
+        } // for ... column
+        return false; // опит да се прескочи фигура
+    }
+
+    if (column == pos.column)
+    { // ход по колоната: 
+        step = (pos.row > row) ? 1 : -1;
+        for (row += step; table[row][column].placed == NULL; row += step)
+        {
+            if (row == pos.row)
+                return true;
+        } // for ... row
+        return false; // опит да се прескочи фигура
+    }
+
 } // Queen::CheckMove
 
 void Queen::GetPossibleMoves(struct POSITION** pos, short& n)
@@ -562,6 +555,12 @@ void Queen::GetPossibleMoves(struct POSITION** pos, short& n)
         if (CheckMove(current))
             positions[n++] = current;
     }
+    for (current.row = position.row + position.column, current.column = 0; current.row >= 0; current.row--, current.column++) // движение по левия диагонал
+        if (CheckMove(current))
+            positions[n++] = current;
+    for (current.row = position.row - position.column, current.column = 0; (current.row < TableSize) && (current.column < TableSize); current.row++, current.column++) // движение по десния диагонал
+        if (CheckMove(current))
+            positions[n++] = current;
     if (n > 0)
     {
         *pos = new POSITION[n];
@@ -665,6 +664,7 @@ int main()
     possible = NULL;
 
     class Piece* WhiteFigures[16];
+    /*
     WhiteFigures[0] = new class King(White, KING, 1, 4, 0, table);
     cout << "King - OK" << endl;
     WhiteFigures[1] = new class Queen(White, QUEEN, 2, 3, 0, table);
@@ -672,14 +672,14 @@ int main()
     WhiteFigures[2] = new class Rook(White, ROOK, 3, 7, 0, table);
     WhiteFigures[3] = new class Rook(White, ROOK, 4, 0, 0, table);
     cout << "Rooks - OK" << endl;
-    WhiteFigures[4] = new class Bishop(White, BISHOP, 5, 2, 0, table);
+        WhiteFigures[4] = new class Bishop(White, BISHOP, 5, 2, 0, table);
     WhiteFigures[5] = new class Bishop(White, BISHOP, 6, 5, 0, table);
     cout << "Bishops - OK" << endl;
     WhiteFigures[6] = new class Knight(White, KNIGHT, 4, 5, 0, table);
     WhiteFigures[7] = new class Knight(White, KNIGHT, 8, 6, 0, table);
     cout << "Knights - OK" << endl;
     for (i = 8; i < 16; i++)
-        WhiteFigures[i] = new class Pawn(White, PAWN, i + 1, i - 8, 1, table);
+            WhiteFigures[i] = new class Pawn(White, PAWN, i + 1, i - 8, 1, table);
     cout << "Pawns - OK" << endl;
 
     //delete possible;
@@ -695,6 +695,15 @@ int main()
     BlackFigures[7] = new class Knight(Black, KNIGHT, 24, 6, 7, table);
     for (i = 8; i < 16; i++)
         BlackFigures[i] = new class Pawn(Black, PAWN, i + 17, i - 8, 6, table);
+    */
 
+    class Piece* BlackFigures[16];
+    BlackFigures[8] = new class Pawn(Black, PAWN, 25, 3, 3, table);
     //BlackFigures[8]->GetPossibleMoves(&possible, n);
+    WhiteFigures[1] = new class Queen(White, QUEEN, 2, 3, 4, table);
+    cout << "Queen - OK" << endl;
+    WhiteFigures[1]->GetPossibleMoves(&possible, n);
+    cout << n << " possible moves found" << endl;
+    for (int i = 0; i < n; i++)
+        cout << possible[i].row << ", " << possible[i].column << endl;
 }
