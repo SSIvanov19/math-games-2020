@@ -4,18 +4,33 @@
 #include <Windows.h>
 using namespace std;
 
+
+//white figures
+char whiteFig[2][8] =
+{
+	{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'},
+	{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'}
+};
+
+//black figures
+char blackFig[2][8] =
+{
+	{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
+	{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'}
+};
+
 //Two-dimensional array that hold 
 //all pieces and their places
 char board[8][8] =
 {
-	{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'},
-	{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
+	{whiteFig[0][0], whiteFig[0][1], whiteFig[0][2], whiteFig[0][3], whiteFig[0][4], whiteFig[0][5], whiteFig[0][6], whiteFig[0][7]},
+	{whiteFig[1][0], whiteFig[1][1], whiteFig[1][2], whiteFig[1][3], whiteFig[1][4], whiteFig[1][5], whiteFig[1][6], whiteFig[1][7]},
 	{32, 32, 32, 32, 32, 32, 32, 32},
 	{32, 32, 32, 32, 32, 32, 32, 32},
 	{32, 32, 32, 32, 32, 32, 32, 32},
 	{32, 32, 32, 32, 32, 32, 32, 32},
-	{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
-	{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'}
+	{blackFig[0][0], blackFig[0][1], blackFig[0][2], blackFig[0][3], blackFig[0][4], blackFig[0][5], blackFig[0][6], blackFig[0][7]},
+	{blackFig[1][0], blackFig[1][1], blackFig[1][2], blackFig[1][3], blackFig[1][4], blackFig[1][5], blackFig[1][6], blackFig[1][7]},
 };
 
 //Two-dimensional array that hold
@@ -58,20 +73,36 @@ bool movementType = false;
 void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourthActive);
 void printSettings(bool firstActive, bool secondActive);
 void printLine(int row);
-void printBoard(bool isGame);
+void printBoard(bool firstGame, string error = "noProblem");
 void newGame();
 
 //This is where code need to check
-bool checkPos(int prevX, int prevY, int x, int y, char ch)
+string checkPos(int prevX, int prevY, int x, int y, char ch)
 {
 	//This is where code need to check
 	if (true)
 	{
-		return true;
+		return "noProblem";
+	}
+	else if(false)
+	{
+		return "problem 1";
+	}
+	else if (false)
+	{
+		return "problem 2";
+	}
+	else if (false)
+	{
+		return "problem 3";
+	}
+	else if (false)
+	{
+		return "problem 4";
 	}
 	else
 	{
-		return false;
+		return "problem 5";
 	}
 }
 
@@ -1160,7 +1191,7 @@ void printLine(int row)
 }
 
 //Print the board
-void printBoard(bool firstGame)
+void printBoard(bool firstGame, string error)
 {
 	//Clear screen
 	system("CLS");
@@ -1175,6 +1206,14 @@ void printBoard(bool firstGame)
 	cout << "     \\______|_|  |_|______||_____/_____/" << endl;
 	cout << endl;
 	cout << "    ======================================" << endl;
+
+	if (error != "noProblem")
+	{
+		cout << endl;
+		cout << " " << error;
+		cout << endl;
+	}
+
 	cout << "\n Current turn: WHITE";
 	cout << "\n\n   A     B     C     D     E     F     G     H\n\n ";
 
@@ -1240,12 +1279,19 @@ void printBoard(bool firstGame)
 			else
 			{
 				//check and place the two pieces 
-				if (checkPos(saveX, saveY, x, y, board[x][y]))
+				if (checkPos(saveX, saveY, x, y, board[x][y]) == "noProblem")
 				{
 					swap(board[saveX][saveY], board[x][y]);
 					selectFirst = false;
 					cellsMatrix[x][y] = true;
 					printBoard(false);
+				}
+				else
+				{
+					string error = checkPos(saveX, saveY, x, y, board[x][y]);
+					selectFirst = false;
+					cellsMatrix[x][y] = true;
+					printBoard(false, error);
 				}
 			}
 		}
@@ -1289,7 +1335,7 @@ void printBoard(bool firstGame)
 		else
 		{
 			//if input is incorrect print board
-			printBoard(false);
+			printBoard(false, "Incorrect input");
 		}
 
 		//From numbers to coordinates
@@ -1327,7 +1373,7 @@ void printBoard(bool firstGame)
 		}
 		else
 		{
-			printBoard(false);
+			printBoard(false, "Incorrect input");
 		}
 			
 		initCellsMatrix();
@@ -1429,10 +1475,17 @@ void printBoard(bool firstGame)
 			else
 			{
 				//Check and place piece
-				if (checkPos(saveX, saveY, x, y, board[x][y]))
+				if (checkPos(saveX, saveY, x, y, board[x][y]) == "noProblem")
 				{
 					swap(board[saveX][saveY], board[x][y]);
 					selectFirst = false;
+				}
+				else
+				{
+					string error = checkPos(saveX, saveY, x, y, board[x][y]);
+					selectFirst = false;
+					cellsMatrix[x][y] = true;
+					printBoard(false, error);
 				}
 			}
 		}
@@ -1622,22 +1675,23 @@ void printSettings(bool firstActive, bool secondActive)
 	}
 }
 
+//Return board back to start
 void newGame()
 {
 	//Standard board
 	char standardBoard[8][8] =
 	{
-		{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'},
-		{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
+		{whiteFig[0][0], whiteFig[0][1], whiteFig[0][2], whiteFig[0][3], whiteFig[0][4], whiteFig[0][5], whiteFig[0][6], whiteFig[0][7]},
+		{whiteFig[1][0], whiteFig[1][1], whiteFig[1][2], whiteFig[1][3], whiteFig[1][4], whiteFig[1][5], whiteFig[1][6], whiteFig[1][7]},
 		{32, 32, 32, 32, 32, 32, 32, 32},
 		{32, 32, 32, 32, 32, 32, 32, 32},
 		{32, 32, 32, 32, 32, 32, 32, 32},
 		{32, 32, 32, 32, 32, 32, 32, 32},
-		{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
-		{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'}
+		{blackFig[0][0], blackFig[0][1], blackFig[0][2], blackFig[0][3], blackFig[0][4], blackFig[0][5], blackFig[0][6], blackFig[0][7]},
+		{blackFig[1][0], blackFig[1][1], blackFig[1][2], blackFig[1][3], blackFig[1][4], blackFig[1][5], blackFig[1][6], blackFig[1][7]},
 	};
 
-	//Make active board same as standart
+	//Make active board same as standard
 	for (int i = 0; i < 8; i++)
 	{
 		for (int j = 0; j < 8; j++)
