@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -138,7 +139,7 @@ void Piece::AddThreat(struct POSITION pos)
     table[position.row][position.column].placed = this; // the cell on the dashboard is occupied with the figure
     GetPossibleMoves(&possible, n); // possible moves (threats) from the new position
     for (i = 0; i < n; i++)
-        if ((kind != PAWN) || (possible[i].row != pos.row)) // пешката не заплашва полето от същия ред
+        if ((kind != PAWN) || (possible[i].row != pos.row)) // the pawn does not threaten the field of the same order
         { // crawl the possible moves
             field = &(table[possible[i].row][possible[i].column]);
             // add the pointer to our figure to the threat array
@@ -643,15 +644,15 @@ int main()
         }
     } // for row...
 
-    cout << " ";
-    printBoard();
+    
 
     class Piece* CurrentFigure = NULL;
     class Piece* AnotherFigure = NULL;
     struct Piece::POSITION* possible;
     struct Piece::POSITION pos;
-    short i, n;
-    bool EndOfGame = false;
+    short i, n, choise;
+    bool EndOfGame = false, ChoiseEnd = true;
+    string ColorTurn = "White";
 
     class Piece* figures[32];
     figures[0] = new class King(White, KING, 1, 4, 0, table);
@@ -675,31 +676,70 @@ int main()
     figures[23] = new class Knight(Black, KNIGHT, 24, 6, 7, table);
     for (i = 24; i < 32; i++)
         figures[i] = new class Pawn(Black, PAWN, i + 1, i - 24, 6, table);
+
     do
     {
+        // cout << " ";
+        // printBoard();
         do
         {
+            (ColorTurn == "White") ? cout << "White's turn" << endl : cout << "Black's turn" << endl;
             cout << "Please enter row and column, where the figure is placed:";
             cin >> row >> column;
+            row -= 1;
+            column -= 1;
             if ((row < 0) || (column < 0))
             {
                 EndOfGame = true;
                 break;
             }
+            if (table[row][column].placed == NULL) {
+                cout << "There is no figure in this field" << endl;
+                continue;
+            }
             CurrentFigure = table[row][column].placed;
-            if (CurrentFigure == NULL)
-                cout << "This field is empty" << endl;
-            else
-                break;
+            possible = NULL;
+            CurrentFigure->GetPossibleMoves(&possible, n);
+            cout << "Color Turn = " << ColorTurn << endl;
+            cout << "Figure Number = " << CurrentFigure->GetNumber() << endl;
+            cout << "Posible moves: " << n << endl;
+            for (i = 0; i < n; i++)
+                cout << "row: " << possible[i].row + 1 << ", column: " << possible[i].column + 1 << endl;
+            if (n == 0) {
+                cout << "This figure can't make a move" << endl;
+            }
+            else {
+                if (ColorTurn == "White" && CurrentFigure->GetNumber() < 16) {
+                    if (CurrentFigure == NULL)
+                        cout << "This field is empty" << endl;
+                    else
+                        break;
+                }
+                else {
+                    if (ColorTurn == "Black" && CurrentFigure->GetNumber() > 16) {
+                        if (CurrentFigure == NULL)
+                            cout << "This field is empty" << endl;
+                        else
+                            break;
+                    }
+                    else {
+                        cout << "Take the right figure" << endl;
+                        continue;
+                    }
+                }
+            }
         } while (true);
         if (EndOfGame)
             break;
         possible = NULL;
         CurrentFigure->GetPossibleMoves(&possible, n);
+        
         do
         {
             cout << "Please enter row and column, where the figure will be moved:";
             cin >> pos.row >> pos.column;
+            pos.row -= 1;
+            pos.column -= 1;
             if ((pos.row < 0) || (pos.column < 0))
             {
                 EndOfGame = true;
@@ -732,6 +772,25 @@ int main()
         pos.row = -1;
         pos.column = -1;
         pos = CurrentFigure->GetPosition();
-        cout << "Now the figure is on field: " << pos.row << ", " << pos.column << endl;
+        cout << "Now the figure is on field: " << pos.row + 1 << ", " << pos.column + 1 << endl;
+        if (CurrentFigure->GetNumber() >= 8 && CurrentFigure->GetNumber() < 16) {
+            if (pos.column == 7) {
+                cout << "What figure you want?" << endl;
+                cout << "Queen-1 Rook-2 Bishop-3 Knight-4" << endl;
+                cout << "Please enter number: " << endl;
+                do {
+                    cin >> choise;
+                    switch (choise) {
+                        case 1: figures[CurrentFigure->GetNumber() - 1] = new class Queen(White, QUEEN, CurrentFigure->GetNumber(), pos.row, 7, table); ChoiseEnd = false; break;
+                        case 2: figures[CurrentFigure->GetNumber() - 1] = new class Rook(White, ROOK, CurrentFigure->GetNumber(), pos.row, 7, table); ChoiseEnd = false; break;
+                        case 3: figures[CurrentFigure->GetNumber() - 1] = new class Bishop(White, BISHOP, CurrentFigure->GetNumber(), pos.row, 7, table); ChoiseEnd = false; break;
+                        case 4: figures[CurrentFigure->GetNumber() - 1] = new class Knight(White, KNIGHT, CurrentFigure->GetNumber(), pos.row, 7, table); ChoiseEnd = false; break;
+                        default: cout << "Invalid number" << endl;
+                    }
+                } while (ChoiseEnd);
+
+            }
+        }
+        (ColorTurn == "White") ? ColorTurn = "Black" : ColorTurn = "White";
     } while (true);
 }
