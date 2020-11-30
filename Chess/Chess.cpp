@@ -55,6 +55,7 @@ public:
     virtual short GetImportance() { return 32767; }
     virtual void GetPossibleMoves(struct POSITION** pos, short& n);
     virtual void MakeMove(struct POSITION pos);
+    bool GetHasBeenMove() { return HasBeenMoved; }
 protected:
     virtual bool CheckMove(struct POSITION pos);
 private:
@@ -68,6 +69,7 @@ public:
     virtual short GetImportance() { return 5; }
     virtual void GetPossibleMoves(struct POSITION** pos, short& n);
     virtual void MakeMove(struct POSITION pos);
+    bool GetHasBeenMove() { return HasBeenMoved; }
 protected:
     virtual bool CheckMove(struct POSITION pos);
 private:
@@ -661,7 +663,7 @@ int main()
     figures[3] = new class Rook(White, ROOK, 4, 0, 0, table);
     figures[4] = new class Bishop(White, BISHOP, 5, 2, 0, table);
     figures[5] = new class Bishop(White, BISHOP, 6, 5, 0, table);
-    figures[6] = new class Knight(White, KNIGHT, 7, 5, 0, table);
+    figures[6] = new class Knight(White, KNIGHT, 7, 1, 0, table);
     figures[7] = new class Knight(White, KNIGHT, 8, 6, 0, table);
     for (i = 8; i < 16; i++)
         figures[i] = new class Pawn(White, PAWN, i + 1, i - 8, 1, table);
@@ -772,6 +774,9 @@ int main()
         pos.row = -1;
         pos.column = -1;
         pos = CurrentFigure->GetPosition();
+        // if (CurrentFigure->GetNumber() == 1 || CurrentFigure->GetNumber() == 17) {
+            //if(CurrentFigure->GetHasBeenMove())
+        // }
         cout << "Now the figure is on field: " << pos.row + 1 << ", " << pos.column + 1 << endl;
         if (CurrentFigure->GetNumber() >= 8 && CurrentFigure->GetNumber() < 16) {
             if (pos.column == 7) {
@@ -786,6 +791,24 @@ int main()
                         case 3: figures[CurrentFigure->GetNumber() - 1] = new class Bishop(White, BISHOP, CurrentFigure->GetNumber(), pos.row, 7, table); ChoiseEnd = false; break;
                         case 4: figures[CurrentFigure->GetNumber() - 1] = new class Knight(White, KNIGHT, CurrentFigure->GetNumber(), pos.row, 7, table); ChoiseEnd = false; break;
                         default: cout << "Invalid number" << endl;
+                    }
+                } while (ChoiseEnd);
+
+            }
+        }
+        if (CurrentFigure->GetNumber() >= 16 && CurrentFigure->GetNumber() < 32) {
+            if (pos.column == 0) {
+                cout << "What figure you want?" << endl;
+                cout << "Queen-1 Rook-2 Bishop-3 Knight-4" << endl;
+                cout << "Please enter number: " << endl;
+                do {
+                    cin >> choise;
+                    switch (choise) {
+                    case 1: figures[CurrentFigure->GetNumber() - 1] = new class Queen(White, QUEEN, CurrentFigure->GetNumber(), pos.row, 0, table); ChoiseEnd = false; break;
+                    case 2: figures[CurrentFigure->GetNumber() - 1] = new class Rook(White, ROOK, CurrentFigure->GetNumber(), pos.row, 0, table); ChoiseEnd = false; break;
+                    case 3: figures[CurrentFigure->GetNumber() - 1] = new class Bishop(White, BISHOP, CurrentFigure->GetNumber(), pos.row, 0, table); ChoiseEnd = false; break;
+                    case 4: figures[CurrentFigure->GetNumber() - 1] = new class Knight(White, KNIGHT, CurrentFigure->GetNumber(), pos.row, 0, table); ChoiseEnd = false; break;
+                    default: cout << "Invalid number" << endl;
                     }
                 } while (ChoiseEnd);
 
