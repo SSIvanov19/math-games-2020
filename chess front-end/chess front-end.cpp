@@ -5,14 +5,16 @@
 using namespace std;
 
 
-//white figures
+//Two-dimensional array that hold 
+//all white figures
 char whiteFig[2][8] =
 {
 	{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'},
 	{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'}
 };
 
-//black figures
+//Two-dimensional array that hold 
+//all black figures
 char blackFig[2][8] =
 {
 	{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
@@ -84,25 +86,9 @@ string checkPos(int prevX, int prevY, int x, int y, char ch)
 	{
 		return "noProblem";
 	}
-	else if(false)
-	{
-		return "problem 1";
-	}
-	else if (false)
-	{
-		return "problem 2";
-	}
-	else if (false)
-	{
-		return "problem 3";
-	}
-	else if (false)
-	{
-		return "problem 4";
-	}
 	else
 	{
-		return "problem 5";
+		return "Impossible movement";
 	}
 }
 
