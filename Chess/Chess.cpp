@@ -1,9 +1,8 @@
 #include <iostream>
 #include <cmath>
 #include <stdlib.h>
-
+#include "frontEnd.h"
 using namespace std;
-
 #define TableSize 8
 
 enum PieceColor { White, Black };
@@ -562,78 +561,11 @@ void Queen::GetPossibleMoves(struct POSITION** pos, short& n)
         *pos = NULL;
 } // Queen::GetPossibleMoves
 
-void printLine(int row)
-{
-    const char whiteSquare = 0xDB;
-    const char blackSquare = 0xFF;
-
-    if (row % 2 == 0)
-    {
-        for (int subRow = 1; subRow <= 3; subRow++)
-        {
-            for (int cells = 1; cells <= 4; cells++)
-            {
-                for (int subCells = 1; subCells <= 6; subCells++)
-                {
-                    if (subCells == 3 && subRow == 2)
-                    {
-                        cout << whiteSquare;
-                    }
-                    else
-                    {
-                        cout << whiteSquare;
-                    }
-                }
-
-                for (int subCells = 1; subCells <= 6; subCells++)
-                {
-                    cout << blackSquare;
-                }
-            }
-
-            if (subRow == 2)
-            {
-                cout << "   " << row;
-            }
-            cout << endl << " ";
-        }
-    }
-    if (row % 2 != 0)
-    {
-        for (int subRow = 1; subRow <= 3; subRow++)
-        {
-            for (int cells = 1; cells <= 4; cells++)
-            {
-                for (int subCells = 1; subCells <= 6; subCells++)
-                {
-                    cout << blackSquare;
-                }
-
-                for (int subCells = 1; subCells <= 6; subCells++)
-                {
-                    cout << whiteSquare;
-                }
-            }
-            if (subRow == 2)
-            {
-                cout << "   " << row;
-            }
-
-            cout << endl << " ";
-        }
-    }
-}
-
-void printBoard()
-{
-    for (int row = 8; row >= 1; row--)
-    {
-        printLine(row);
-    }
-}
-
 int main()
 {
+    //Set text to white
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+
     short row, column;
     table = new FIELD * [TableSize];
     for (row = 0; row < TableSize; row++)
@@ -646,7 +578,7 @@ int main()
         }
     } // for row...
 
-    
+
 
     class Piece* CurrentFigure = NULL;
     class Piece* AnotherFigure = NULL;
@@ -657,7 +589,7 @@ int main()
     string ColorTurn = "White";
 
     class Piece* figures[32];
-    figures[0] = new class King(White, KING, 1, 4, 0, table);
+    figures[0] = new class King(White, KING, 1, (short)4, (short)0, table);
     figures[1] = new class Queen(White, QUEEN, 2, 3, 0, table);
     figures[2] = new class Rook(White, ROOK, 3, 7, 0, table);
     figures[3] = new class Rook(White, ROOK, 4, 0, 0, table);
@@ -680,13 +612,15 @@ int main()
         figures[i] = new class Pawn(Black, PAWN, i + 1, i - 24, 6, table);
 
     do
-    {
-        // cout << " ";
-        // printBoard();
+    {  
+        //Print menu
+        printMenu(true, false, false, false);
+
         do
         {
             (ColorTurn == "White") ? cout << "White's turn" << endl : cout << "Black's turn" << endl;
             cout << "Please enter row and column, where the figure is placed:";
+
             cin >> row >> column;
             row -= 1;
             column -= 1;
@@ -814,6 +748,7 @@ int main()
 
             }
         }
+        
         (ColorTurn == "White") ? ColorTurn = "Black" : ColorTurn = "White";
     } while (true);
 }

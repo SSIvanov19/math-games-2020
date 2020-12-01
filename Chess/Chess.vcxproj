@@ -139,7 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="backEnd_.cpp" />
     <ClCompile Include="Chess.cpp" />
+    <ClCompile Include="frontEnd.cpp" />
+    <ClCompile Include="backEnd.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="backEnd.h" />
+    <ClInclude Include="frontEnd.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
