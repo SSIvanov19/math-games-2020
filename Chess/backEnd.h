@@ -14,6 +14,10 @@ enum PieceKind { KING, QUEEN, ROOK, BISHOP, KNIGHT, PAWN };
 
 class Piece;
 
+string checkPos(int, int, int, int);
+
+void initBackEnd();
+
 struct FIELD
 {
     class Piece* placed;

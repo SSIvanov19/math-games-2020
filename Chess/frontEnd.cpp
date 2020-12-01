@@ -3,6 +3,7 @@
 #include<iostream>
 #include <Windows.h>
 #include "frontEnd.h"
+#include "backEnd.h"
 
 using namespace std;
 
@@ -11,30 +12,30 @@ using namespace std;
 //all white figures
 char whiteFig[2][8] =
 {
-	{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'},
-	{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'}
+	{'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
+	{'T', 'H', 'O', 'Q', 'K', 'O', 'H', 'T'}
 };
 
 //Two-dimensional array that hold 
 //all black figures
 char blackFig[2][8] =
 {
-	{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
-	{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'}
+	{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'},
+	{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'}
 };
 
 //Two-dimensional array that hold 
 //all pieces and their places
 char board[8][8] =
 {
-	{whiteFig[0][0], whiteFig[0][1], whiteFig[0][2], whiteFig[0][3], whiteFig[0][4], whiteFig[0][5], whiteFig[0][6], whiteFig[0][7]},
-	{whiteFig[1][0], whiteFig[1][1], whiteFig[1][2], whiteFig[1][3], whiteFig[1][4], whiteFig[1][5], whiteFig[1][6], whiteFig[1][7]},
-	{32, 32, 32, 32, 32, 32, 32, 32},
-	{32, 32, 32, 32, 32, 32, 32, 32},
-	{32, 32, 32, 32, 32, 32, 32, 32},
-	{32, 32, 32, 32, 32, 32, 32, 32},
 	{blackFig[0][0], blackFig[0][1], blackFig[0][2], blackFig[0][3], blackFig[0][4], blackFig[0][5], blackFig[0][6], blackFig[0][7]},
 	{blackFig[1][0], blackFig[1][1], blackFig[1][2], blackFig[1][3], blackFig[1][4], blackFig[1][5], blackFig[1][6], blackFig[1][7]},
+	{32, 32, 32, 32, 32, 32, 32, 32},
+	{32, 32, 32, 32, 32, 32, 32, 32},
+	{32, 32, 32, 32, 32, 32, 32, 32},
+	{32, 32, 32, 32, 32, 32, 32, 32},
+	{whiteFig[0][0], whiteFig[0][1], whiteFig[0][2], whiteFig[0][3], whiteFig[0][4], whiteFig[0][5], whiteFig[0][6], whiteFig[0][7]},
+	{whiteFig[1][0], whiteFig[1][1], whiteFig[1][2], whiteFig[1][3], whiteFig[1][4], whiteFig[1][5], whiteFig[1][6], whiteFig[1][7]}
 };
 
 //Two-dimensional array that hold
@@ -72,21 +73,6 @@ int saveY;
 //1 = coordinate
 //0 = WASD
 bool movementType = false;
-
-
-//This is where code need to check
-string checkPos(int prevX, int prevY, int x, int y)
-{
-	//This is where code need to check
-	if (true)
-	{
-		return "noProblem";
-	}
-	else
-	{
-		return "Impossible movement";
-	}
-}
 
 //Make all element of arr
 //equal false
@@ -1667,14 +1653,14 @@ void newGame()
 	//Standard board
 	char standardBoard[8][8] =
 	{
-		{whiteFig[0][0], whiteFig[0][1], whiteFig[0][2], whiteFig[0][3], whiteFig[0][4], whiteFig[0][5], whiteFig[0][6], whiteFig[0][7]},
-		{whiteFig[1][0], whiteFig[1][1], whiteFig[1][2], whiteFig[1][3], whiteFig[1][4], whiteFig[1][5], whiteFig[1][6], whiteFig[1][7]},
-		{32, 32, 32, 32, 32, 32, 32, 32},
-		{32, 32, 32, 32, 32, 32, 32, 32},
-		{32, 32, 32, 32, 32, 32, 32, 32},
-		{32, 32, 32, 32, 32, 32, 32, 32},
 		{blackFig[0][0], blackFig[0][1], blackFig[0][2], blackFig[0][3], blackFig[0][4], blackFig[0][5], blackFig[0][6], blackFig[0][7]},
 		{blackFig[1][0], blackFig[1][1], blackFig[1][2], blackFig[1][3], blackFig[1][4], blackFig[1][5], blackFig[1][6], blackFig[1][7]},
+		{32, 32, 32, 32, 32, 32, 32, 32},
+		{32, 32, 32, 32, 32, 32, 32, 32},
+		{32, 32, 32, 32, 32, 32, 32, 32},
+		{32, 32, 32, 32, 32, 32, 32, 32},
+		{whiteFig[0][0], whiteFig[0][1], whiteFig[0][2], whiteFig[0][3], whiteFig[0][4], whiteFig[0][5], whiteFig[0][6], whiteFig[0][7]},
+		{whiteFig[1][0], whiteFig[1][1], whiteFig[1][2], whiteFig[1][3], whiteFig[1][4], whiteFig[1][5], whiteFig[1][6], whiteFig[1][7]}
 	};
 
 	//Make active board same as standard
