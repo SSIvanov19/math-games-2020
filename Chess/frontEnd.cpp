@@ -73,12 +73,6 @@ int saveY;
 //0 = WASD
 bool movementType = false;
 
-//All function are global declare for easier access
-//void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourthActive);
-//void printSettings(bool firstActive, bool secondActive);
-//void printLine(int row);
-//void printBoard(bool firstGame, string error = "noProblem" );
-//void newGame();
 
 //This is where code need to check
 string checkPos(int prevX, int prevY, int x, int y)
@@ -114,7 +108,7 @@ void printLine(int row)
 	const char whiteSquare = 0xDB;
 	const char blackSquare = 0xFF;
 
-
+	//moment
 	//check if row is even
 	if (row % 2 == 0)
 	{
