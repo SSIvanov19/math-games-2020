@@ -570,42 +570,59 @@ string checkPos(int prevX, int prevY, int x, int y)
                 if (WhiteKingHasBeenMove == false) {
                     if (LeftWhiteRookHasBeenMove == false || RightWhiteRookHasBeenMove == false) {
                         if (pos.row == 6 && pos.column == 0) {
-                            figures[0] = new class King(White, KING, number, pos.row, pos.column, table);
-                            figures[2] = new class Rook(White, QUEEN, number, pos.row - 1, pos.column, table);
+                            figures[0] = new class King(White, KING, 1, pos.row, pos.column, table);
+                            figures[2] = new class Rook(White, QUEEN, 3, pos.row - 1, pos.column, table);
                             RightWhiteRookHasBeenMove = true;
                             WhiteRockade = true;
+                            return "Rockade";
                             break;
                         }
                         if (pos.row == 2 && pos.column == 0) {
-                            figures[0] = new class King(White, KING, number, pos.row, pos.column, table);
-                            figures[3] = new class Rook(White, QUEEN, number, pos.row + 1, pos.column, table);
+                            figures[0] = new class King(White, KING, 1, pos.row, pos.column, table);
+                            figures[3] = new class Rook(White, QUEEN, 4, pos.row + 1, pos.column, table);
                             LeftWhiteRookHasBeenMove = true;
                             WhiteRockade = true;
+                            return "Rockade";
                             break;
                         }
                     }
                 }
+
                 if (i >= n)
                     return "This move is impossible";
                 else {
                     WhiteKingHasBeenMove = true;
+                    /*
+                    for (int m = 16; m < 32; m++) {
+                        figures[m]->GetPossibleMoves(&possible, n);
+                        for (int l = 0; l < n; l++) {
+                            if (pos.row == possible[l].row && pos.column == possible[l].column) {
+                                return "This move is impossible";
+                                break;
+                            }
+                            //possible[l].row 
+                            //possible[l].column
+                        }
+                        delete possible;
+                        possible = NULL;
+                    }
+                    */
                     break;
                 }
-
             }
 
             if (CurrentFigure->GetKind() == KING && CurrentFigure->GetColor() == Black) {
                 if (BlackKingHasBeenMove == false) {
                     if (LeftBlackRookHasBeenMove == false || RightBlackRookHasBeenMove == false) {
                         if (pos.row == 6 && pos.column == 7) {
-                            figures[16] = new class King(Black, KING, number, pos.row, pos.column, table);
-                            figures[18] = new class Rook(Black, QUEEN, number, pos.row - 1, pos.column, table);
+                            figures[16] = new class King(Black, KING, 17, pos.row, pos.column, table);
+                            figures[18] = new class Rook(Black, QUEEN, 19, pos.row - 1, pos.column, table);
                             RightBlackRookHasBeenMove = true;
                             BlackRockade = true;
                         }
                         if (pos.row == 2 && pos.column == 7) {
-                            figures[16] = new class King(Black, KING, number, pos.row, pos.column, table);
-                            figures[19] = new class Rook(Black, QUEEN, number, pos.row + 1, pos.column, table);
+                            figures[16] = new class King(Black, KING, 17, pos.row, pos.column, table);
+                            figures[19] = new class Rook(Black, QUEEN, 20, pos.row + 1, pos.column, table);
                             LeftBlackRookHasBeenMove = true;
                             BlackRockade = true;
                         }
