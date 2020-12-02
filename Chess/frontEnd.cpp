@@ -1464,8 +1464,28 @@ void printBoard(bool firstGame, string error)
 						board[x][y] = 32;
 					}
 					
+					//Swap the two fig
 					swap(board[saveX][saveY], board[x][y]);
 
+
+					//Make the Rockado
+					if (board[x][y] == 'K' && board[x][y + 1] == 'T')
+					{
+						swap(board[x][y + 1], board[x][y - 1]);
+					}
+					else if (board[x][y] == 'k' && board[x][y + 1] == 't')
+					{
+						swap(board[x][y + 1], board[x][y - 1]);
+					}
+					else if (board[x][y] == 'K' && board[x][y - 2] == 'T')
+					{
+						swap(board[x][y - 2], board[x][y + 1]);
+					}
+					else if (board[x][y] == 'k' && board[x][y - 2] == 't')
+					{
+						swap(board[x][y - 2], board[x][y + 1]);
+					}
+					
 					turn = !turn;
 					selectFirst = false;
 				}
@@ -1675,6 +1695,8 @@ void newGame()
 {
 	//Return backend to start
 	initBackEnd();
+
+	turn = 1;
 	
 	//Standard board
 	char standardBoard[8][8] =

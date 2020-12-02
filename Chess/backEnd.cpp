@@ -489,6 +489,7 @@ void Queen::GetPossibleMoves(struct POSITION** pos, short& n)
 string checkPos(int prevX, int prevY, int x, int y)
 {
     short temp1, temp2;
+	
     temp2 = prevY;
     prevY = 7 - prevX;
     temp1 = y;
@@ -574,7 +575,6 @@ string checkPos(int prevX, int prevY, int x, int y)
                             figures[2] = new class Rook(White, QUEEN, 3, pos.row - 1, pos.column, table);
                             RightWhiteRookHasBeenMove = true;
                             WhiteRockade = true;
-                            return "Rockade";
                             break;
                         }
                         if (pos.row == 2 && pos.column == 0) {
@@ -582,7 +582,6 @@ string checkPos(int prevX, int prevY, int x, int y)
                             figures[3] = new class Rook(White, QUEEN, 4, pos.row + 1, pos.column, table);
                             LeftWhiteRookHasBeenMove = true;
                             WhiteRockade = true;
-                            return "Rockade";
                             break;
                         }
                     }
@@ -600,7 +599,7 @@ string checkPos(int prevX, int prevY, int x, int y)
                                 return "This move is impossible";
                                 break;
                             }
-                            //possible[l].row 
+                            //possible[l].row
                             //possible[l].column
                         }
                         delete possible;
@@ -619,12 +618,14 @@ string checkPos(int prevX, int prevY, int x, int y)
                             figures[18] = new class Rook(Black, QUEEN, 19, pos.row - 1, pos.column, table);
                             RightBlackRookHasBeenMove = true;
                             BlackRockade = true;
+                            break;
                         }
                         if (pos.row == 2 && pos.column == 7) {
                             figures[16] = new class King(Black, KING, 17, pos.row, pos.column, table);
                             figures[19] = new class Rook(Black, QUEEN, 20, pos.row + 1, pos.column, table);
                             LeftBlackRookHasBeenMove = true;
                             BlackRockade = true;
+                            break;
                         }
                     }
                 }
@@ -634,7 +635,8 @@ string checkPos(int prevX, int prevY, int x, int y)
                     BlackKingHasBeenMove = true;
                     break;
                 }
-            } else {
+            }
+            else {
                 if (i >= n)
                     return "This move is impossible";
                 else
@@ -705,7 +707,7 @@ string checkPos(int prevX, int prevY, int x, int y)
         }
         */
         (ColorTurn == "White") ? ColorTurn = "Black" : ColorTurn = "White";
-
+    	
         return "noProblem";
     } while (true);
 }
@@ -746,4 +748,6 @@ void initBackEnd()
     figures[23] = new class Knight(Black, KNIGHT, 24, 6, 7, table);
     for (i = 24; i < 32; i++)
         figures[i] = new class Pawn(Black, PAWN, i + 1, i - 24, 6, table);
+
+    ColorTurn = "White";
 }
