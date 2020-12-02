@@ -12,6 +12,7 @@ class Rook* RookFigure = NULL;
 struct Piece::POSITION* possible;
 struct Piece::POSITION pos;
 short i, n, choise, WhiteRockade = false, BlackRockade = false;
+short WhiteWin = 0, BlackWin = 0;
 bool WhiteKingHasBeenMove = false;
 bool LeftWhiteRookHasBeenMove = false, RightWhiteRookHasBeenMove = false;
 bool BlackKingHasBeenMove = false;
@@ -506,9 +507,6 @@ string checkPos(int prevX, int prevY, int x, int y)
     {
         do
         {
-            //(ColorTurn == "White") ? cout << "White's turn" << endl : cout << "Black's turn" << endl;
-            // cout << "Please enter row and column, where the figure is placed:";
-
             row = temp2;
             column = prevY;
 
@@ -526,15 +524,18 @@ string checkPos(int prevX, int prevY, int x, int y)
             CurrentFigure = table[row][column].placed;
             possible = NULL;
             CurrentFigure->GetPossibleMoves(&possible, n);
-            //cout << endl;
-            //cout << "Color Turn = " << ColorTurn << endl;
-            //cout << "Figure Number = " << CurrentFigure->GetNumber() << endl;
-            //cout << "Posible moves: " << n << endl;
-
-            //for (i = 0; i < n; i++)
-                //cout << "row: " << possible[i].row << ", column: " << possible[i].column << endl;
             if (n == 0) {
-                return "This figure can't make a move";
+                (ColorTurn == "White") ? ++WhiteWin : ++BlackWin;
+                if (BlackWin >= 3) {
+                    return "White Win";
+                    break;
+                }
+
+                if (WhiteWin >= 3) {
+                    return "Black Win";
+                    break;
+                }
+                return "1 - This figure can't make a move";
             }
             else {
                 if (ColorTurn == "White" && CurrentFigure->GetNumber() < 16) {
@@ -551,7 +552,17 @@ string checkPos(int prevX, int prevY, int x, int y)
                             break;
                     }
                     else {
-                        return "Take the right figure";
+                        (ColorTurn == "White") ? WhiteWin++ : BlackWin++;
+                        if (BlackWin >= 3) {
+                            return "White Win";
+                            break;
+                        }
+
+                        if (WhiteWin >= 3) {
+                            return "Black Win";
+                            break;
+                        }
+                        return "2 - Take the right figure";
                         continue;
                     }
                 }
@@ -594,25 +605,21 @@ string checkPos(int prevX, int prevY, int x, int y)
                     }
                 }
 
-                if (i >= n)
-                    return "This move is impossible";
+                if (i >= n) {
+                    (ColorTurn == "White") ? ++WhiteWin : ++BlackWin;
+                    if (BlackWin >= 3) {
+                        return "White Win";
+                        break;
+                    }
+
+                    if (WhiteWin >= 3) {
+                        return "Black Win";
+                        break;
+                    }
+                    return "3 -This move is impossible";
+                }
                 else {
                     WhiteKingHasBeenMove = true;
-                    /*
-                    for (int m = 16; m < 32; m++) {
-                        figures[m]->GetPossibleMoves(&possible, n);
-                        for (int l = 0; l < n; l++) {
-                            if (pos.row == possible[l].row && pos.column == possible[l].column) {
-                                return "This move is impossible";
-                                break;
-                            }
-                            //possible[l].row
-                            //possible[l].column
-                        }
-                        delete possible;
-                        possible = NULL;
-                    }
-                    */
                     break;
                 }
             }
@@ -636,16 +643,38 @@ string checkPos(int prevX, int prevY, int x, int y)
                         }
                     }
                 }
-                if (i >= n)
-                    return "This move is impossible";
+                if (i >= n) {
+                    (ColorTurn == "White") ? ++WhiteWin : ++BlackWin;
+                    if (BlackWin >= 3) {
+                        return "White Win";
+                        break;
+                    }
+
+                    if (WhiteWin >= 3) {
+                        return "Black Win";
+                        break;
+                    }
+                    return "4 - This move is impossible";
+                }
                 else {
                     BlackKingHasBeenMove = true;
                     break;
                 }
             }
             else {
-                if (i >= n)
-                    return "This move is impossible";
+                if (i >= n) {
+                    (ColorTurn == "White") ? ++WhiteWin : ++BlackWin;
+                    if (BlackWin >= 3) {
+                        return "White Win";
+                        break;
+                    }
+
+                    if (WhiteWin >= 3) {
+                        return "Black Win";
+                        break;
+                    }
+                    return "5 - This move is impossible";
+                }
                 else
                     break;
             }
@@ -654,17 +683,9 @@ string checkPos(int prevX, int prevY, int x, int y)
             delete possible;
         if (EndOfGame)
             break;
-        /*
-        if (WhiteRockade) {
-            (ColorTurn == "White") ? ColorTurn = "Black" : ColorTurn = "White";
-            WhiteRockade = false;
-            continue;
-        }
-        */
         AnotherFigure = table[pos.row][pos.column].placed;
         if (AnotherFigure != NULL)
         {
-            //cout << "Kill " << AnotherFigure->GetLetter() << endl;
             n = AnotherFigure->GetNumber() - 1;
             cout << n << endl;
             //delete figures[n];
@@ -674,7 +695,6 @@ string checkPos(int prevX, int prevY, int x, int y)
         pos.row = -1;
         pos.column = -1;
         pos = CurrentFigure->GetPosition();
-        //cout << "Now the figure is on field: " << pos.row + 1 << ", " << pos.column + 1 << endl;
         /*
         if (CurrentFigure->GetKind() == PAWN) {
             if (pos.column == 7) {
@@ -688,7 +708,7 @@ string checkPos(int prevX, int prevY, int x, int y)
                     case 2: figures[number - 1] = new class Rook(White, ROOK, number, pos.row, 7, table); ChoiseEnd = false; break;
                     case 3: figures[number - 1] = new class Bishop(White, BISHOP, number, pos.row, 7, table); ChoiseEnd = false; break;
                     case 4: figures[number - 1] = new class Knight(White, KNIGHT, number, pos.row, 7, table); ChoiseEnd = false; break;
-                    default: cout << "Invalid number" << endl;
+                    default: return "Invalid number";
                     }
                 } while (ChoiseEnd);
 
@@ -706,15 +726,24 @@ string checkPos(int prevX, int prevY, int x, int y)
                     case 2: figures[number - 1] = new class Rook(White, ROOK, number, pos.row, 0, table); ChoiseEnd = false; break;
                     case 3: figures[number - 1] = new class Bishop(White, BISHOP, number, pos.row, 0, table); ChoiseEnd = false; break;
                     case 4: figures[number - 1] = new class Knight(White, KNIGHT, number, pos.row, 0, table); ChoiseEnd = false; break;
-                    default: cout << "Invalid number" << endl;
+                    default: return "Invalid number";
                     }
                 } while (ChoiseEnd);
 
             }
         }
         */
-        (ColorTurn == "White") ? ColorTurn = "Black" : ColorTurn = "White";
+        if (BlackWin >= 3) {
+            return "White Win";
+            break;
+        }
 
+        if (WhiteWin >= 3) {
+            return "Black Win";
+            break;
+        }
+
+        (ColorTurn == "White") ? ColorTurn = "Black" : ColorTurn = "White";
         return "noProblem";
     } while (true);
 }
