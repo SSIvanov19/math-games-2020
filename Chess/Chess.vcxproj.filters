@@ -21,9 +21,6 @@
     <ClCompile Include="frontEnd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="backEnd_.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="backEnd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

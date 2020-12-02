@@ -1,6 +1,5 @@
 #include <iostream>
-#include <cmath>
-#include <stdlib.h>
+#include <Windows.h>
 #include "frontEnd.h"
 #include "backEnd.h"
 
@@ -11,10 +10,12 @@ int main()
     //Set text to white
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 
+	//Initiate backend
     initBackEnd();
 
     while (true)
     {
+    	//print menu
         printMenu(true, false, false, false);
     }
 }

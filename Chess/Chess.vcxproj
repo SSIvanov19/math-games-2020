@@ -139,7 +139,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="backEnd_.cpp" />
     <ClCompile Include="Chess.cpp" />
     <ClCompile Include="frontEnd.cpp" />
     <ClCompile Include="backEnd.cpp" />

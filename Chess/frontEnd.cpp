@@ -1175,6 +1175,7 @@ void printBoard(bool firstGame, string error)
 	cout << endl;
 	cout << "    ======================================" << endl;
 
+	//Print if there is a problem
 	if (error != "noProblem")
 	{
 		cout << endl;
@@ -1182,7 +1183,9 @@ void printBoard(bool firstGame, string error)
 		cout << endl;
 	}
 
-	cout << "\n Current turn: WHITE";
+	//Print turn
+	(turn) ? cout << "\n Current turn: WHITE" << endl : cout << "\n Current turn: BLACK" << endl;
+	
 	cout << "\n\n   A     B     C     D     E     F     G     H\n\n ";
 
 	//if it is first game
@@ -1249,16 +1252,27 @@ void printBoard(bool firstGame, string error)
 				//check and place the two pieces 
 				if (checkPos(saveX, saveY, x, y) == "noProblem")
 				{
+					//Remove fig from board
+					if (board[x][y] != 32)
+					{
+						board[x][y] = 32;
+					}
+					
 					swap(board[saveX][saveY], board[x][y]);
+					
+					turn = !turn;
 					selectFirst = false;
 					cellsMatrix[x][y] = true;
+					
 					printBoard(false);
 				}
 				else
 				{
 					string error = checkPos(saveX, saveY, x, y);
+					
 					selectFirst = false;
 					cellsMatrix[x][y] = true;
+					
 					printBoard(false, error);
 				}
 			}
@@ -1445,14 +1459,23 @@ void printBoard(bool firstGame, string error)
 				//Check and place piece
 				if (checkPos(saveX, saveY, x, y) == "noProblem")
 				{
+					if (board[x][y] != 32)
+					{
+						board[x][y] = 32;
+					}
+					
 					swap(board[saveX][saveY], board[x][y]);
+
+					turn = !turn;
 					selectFirst = false;
 				}
 				else
 				{
 					string error = checkPos(saveX, saveY, x, y);
+
 					selectFirst = false;
 					cellsMatrix[x][y] = true;
+
 					printBoard(false, error);
 				}
 			}
@@ -1650,6 +1673,9 @@ void printSettings(bool firstActive, bool secondActive)
 //Return board back to start
 void newGame()
 {
+	//Return backend to start
+	initBackEnd();
+	
 	//Standard board
 	char standardBoard[8][8] =
 	{
@@ -1672,16 +1698,3 @@ void newGame()
 		}
 	}
 }
-/*
-int main()
-{
-	//Set text to white
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
-
-	//Print menu
-	while (true)
-	{
-		printMenu(true, false, false, false);
-	}
-}
-*/
