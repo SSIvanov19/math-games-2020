@@ -1208,7 +1208,8 @@ void printBoard(bool firstGame, string error)
 		//Coordinates
 		int x = 0;
 		int y = 0;
-		cout << "Type coordinate: ";
+		
+		cout << "\n Type coordinate. First is the letter, second is the number. \n Pres Enter to pick up or place the figure. To exit pres ESC.\n";
 
 		//Get coordinates
 		const char ch = _getch();
@@ -1217,7 +1218,7 @@ void printBoard(bool firstGame, string error)
 		if (ch == '\x1b')
 		{
 			initCellsMatrix();
-			printMenu(true, false, false, false);
+			printMenu(true, false, false, false, false, false);
 		}
 
 		//make all element false and save the final coordinates 
@@ -1258,7 +1259,27 @@ void printBoard(bool firstGame, string error)
 						board[x][y] = 32;
 					}
 					
+					//Swap the two fig
 					swap(board[saveX][saveY], board[x][y]);
+
+
+					//Make the Rockado
+					if (board[x][y] == 'K' && board[x][y + 1] == 'T')
+					{
+						swap(board[x][y + 1], board[x][y - 1]);
+					}
+					else if (board[x][y] == 'k' && board[x][y + 1] == 't')
+					{
+						swap(board[x][y + 1], board[x][y - 1]);
+					}
+					else if (board[x][y] == 'K' && board[x][y - 2] == 'T')
+					{
+						swap(board[x][y - 2], board[x][y + 1]);
+					}
+					else if (board[x][y] == 'k' && board[x][y - 2] == 't')
+					{
+						swap(board[x][y - 2], board[x][y + 1]);
+					}
 					
 					turn = !turn;
 					selectFirst = false;
@@ -1374,7 +1395,7 @@ void printBoard(bool firstGame, string error)
 		//coordinate for y
 		int y = 0;
 
-		cout << "Move with WASD";
+		cout << "\n Move with WASD. Pres Enter to pick up or place the figure. To exit pres ESC.\n";
 
 		//Get char
 		const char ch = _getch();
@@ -1383,7 +1404,7 @@ void printBoard(bool firstGame, string error)
 		if (ch == '\x1b')
 		{
 			initCellsMatrix();
-			printMenu(true, false, false, false);
+			printMenu(true, false, false, false, false, false);
 		}
 
 		//make all element false and save the final coordinates 
@@ -1511,8 +1532,96 @@ void printBoard(bool firstGame, string error)
 	}
 }
 
+void printAbout()
+{
+	//Clear screen
+	system("CLS");
+
+	//print About
+	cout << "    ==========================================" << endl;
+	cout << "                ____   ____  _    _ _______" << endl; 
+	cout << "          /\\   |  _ \\ / __ \\| |  | |__   __|" << endl; 
+	cout << "         /  \\  | |_) | |  | | |  | |  | |" << endl; 
+	cout << "        / /\\ \\ |  _ <| |  | | |  | |  | |   " << endl; 
+	cout << "       / ____ \\| |_) | |__| | |__| |  | |" << endl; 
+	cout << "      /_/    \\_\\____/ \\____/ \\____/   |_|" << endl;
+	cout << "    ==========================================" << endl;
+                                       
+
+
+
+	cout << endl;
+	cout << " MathGames2020" << endl;
+	cout << " A basic chess program made in vanilla C++." << endl;
+	cout << endl;
+	cout << " Participants:" << endl;
+	cout << " Atanas Pozharliev - ABPozharliev19@codingburgas.bg - Code Checker" << endl;
+	cout << " Stoyan Ivanov - SSIvanov19@codingburgas.bg - Front - End Developer" << endl;
+	cout << " Stas Uzunov - SSUzunov19@codingburgas.bg - C++ Developer" << endl;
+	cout << " Stefan Hristov - SHHristov19@codingburgas.bg - Scrum Trainer" << endl;
+	cout << endl;
+	cout << " Team VAVILON" << endl;
+	cout << endl;
+	cout << " -> Back" << endl;
+
+	//Wait for input
+	const char ch = _getch();
+
+	if (ch == '\r' || ch == '\x1b')
+	{
+		printMenu(false, false, false, false, true, false);
+	}
+}
+
+
+void printHowToPlay()
+{
+	//Clear screen
+	system("CLS");
+
+	//print How to play
+	cout << "    ==================================================" << endl;
+	cout << "	 _    _  ______          __  _______ ____" << endl;
+	cout << "	| |  | |/ __ \\ \\        / / |__   __/ __ \\" << endl;
+	cout << "	| |__| | |  | \\ \\  /\\  / /     | | | |  | |" << endl;
+	cout << "	|  __  | |  | |\\ \\/  \\/ /      | | | |  | |" << endl;
+	cout << "	| |  | | |__| | \\  /\\  /       | | | |__| |" << endl;
+	cout << "	|_|  |_|\\____/   \\/  \\/   _    |_|  \\____/ " << endl;
+	cout << "	     |  __ \\| |        /\\\\ \\   / /" << endl;
+	cout << "	     | |__) | |       /  \\\\ \\_/ /" << endl;
+	cout << "	     |  ___/| |      / /\\ \\\\   /" << endl;
+	cout << "	     | |    | |____ / ____ \\| |" << endl;
+	cout << "	     |_|    |______/_/    \\_\\_|" << endl;
+	cout << "    ==================================================" << endl;
+
+	cout << endl;
+	cout << " There are two type of movement in the game. You can change them in Setting tab. By default Keyboard is selected." << endl << " This means that you go around the board by pressing w, a, s or d. You can pick or please a figure with the enter button." << endl << " The other settings is Coordinates, then you need to enter the coordinate manual. After that press enter to pick up or place the figure." << endl;
+	cout << endl;
+	cout << " The white figures are represented in uppercase letters, the black figures are represented in lowercase letters." << endl << " They are all represented by the first letter of their names, the only exception being the Knight," << endl << " which is represented by an N, leaving the K for the king):" << endl;
+	cout << endl;
+	cout << " Pawn" << endl;
+	cout << " Rook" << endl;
+	cout << " kNight" << endl;
+	cout << " Bishop" << endl;
+	cout << " Queen" << endl;
+	cout << " King" << endl;
+	cout << endl;
+	cout << " And don't forget to have fun, while playing." << endl << endl;
+	
+	cout << " -> Back" << endl;
+	
+	//Wait for input
+	const char ch = _getch();
+	
+	if (ch == '\r' || ch == '\x1b')
+	{
+		printMenu(false, false, false, true, false, false);
+	}
+}
+
+
 //Print the menu
-void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourthActive)
+void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourthActive, bool fifthActive, bool sixthActive)
 {
 	//Clear screen
 	system("CLS");
@@ -1533,9 +1642,16 @@ void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourt
 
 	//Check which choice is active
 	cout << " "; if (firstActive)  cout << "-> ";  else cout << "   "; cout << "New Game " << endl;
+	cout << endl;
 	cout << " "; if (secondActive)  cout << "-> ";  else cout << "   "; cout << "Resume Game" << endl;
+	cout << endl;
 	cout << " "; if (thirdActive)  cout << "-> ";  else cout << "   "; cout << "Settings" << endl;
-	cout << " "; if (fourthActive)  cout << "-> ";  else cout << "   "; cout << "Exit" << endl;
+	cout << endl;
+	cout << " "; if (fourthActive)  cout << "-> ";  else cout << "   "; cout << "How to play" << endl;
+	cout << endl;
+	cout << " "; if (fifthActive)  cout << "-> ";  else cout << "   "; cout << "About" << endl;
+	cout << endl;
+	cout << " "; if (sixthActive)  cout << "-> ";  else cout << "   "; cout << "Exit" << endl;
 
 	//Get ch
 	const char ch = _getch();
@@ -1545,22 +1661,32 @@ void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourt
 	{
 		if (firstActive)
 		{
-			printMenu(false, true, false, false);
+			printMenu(false, true, false, false, false, false);
 		}
 
 		if (secondActive)
 		{
-			printMenu(false, false, true, false);
+			printMenu(false, false, true, false, false, false);
 		}
 
 		if (thirdActive)
 		{
-			printMenu(false, false, false, true);
+			printMenu(false, false, false, true, false, false);
 		}
 
 		if (fourthActive)
 		{
-			printMenu(true, false, false, false);
+			printMenu(false, false, false, false, true, false);
+		}
+
+		if (fifthActive)
+		{
+			printMenu(false, false, false, false, false, true);
+		}
+
+		if (sixthActive)
+		{
+			printMenu(true, false, false, false, false, false);
 		}
 	}
 
@@ -1569,22 +1695,32 @@ void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourt
 	{
 		if (firstActive)
 		{
-			printMenu(false, false, false, true);
+			printMenu(false, false, false, false, false, true);
 		}
 
 		if (secondActive)
 		{
-			printMenu(true, false, false, false);
+			printMenu(true, false, false, false, false, false);
 		}
 
 		if (thirdActive)
 		{
-			printMenu(false, true, false, false);
+			printMenu(false, true, false, false, false, false);
 		}
 
 		if (fourthActive)
 		{
-			printMenu(false, false, true, false);
+			printMenu(false, false, true, false, false, false);
+		}
+
+		if (fifthActive)
+		{
+			printMenu(false, false, false, true, false, false);
+		}
+
+		if (sixthActive)
+		{
+			printMenu(false, false, false, false, true, false);
 		}
 	}
 
@@ -1612,6 +1748,18 @@ void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourt
 
 		if (fourthActive)
 		{
+			//Print How to Play
+			printHowToPlay();
+		}
+
+		if (fifthActive)
+		{
+			//Print About Section
+			printAbout();
+		}
+
+		if (sixthActive)
+		{
 			//Exit the game
 			exit(3);
 		}
@@ -1619,7 +1767,7 @@ void printMenu(bool firstActive, bool secondActive, bool thirdActive, bool fourt
 	}
 	else
 	{
-		printMenu(firstActive, secondActive, thirdActive, fourthActive);
+		printMenu(firstActive, secondActive, thirdActive, fourthActive, fifthActive, sixthActive);
 	}
 }
 
@@ -1684,7 +1832,7 @@ void printSettings(bool firstActive, bool secondActive)
 		if (secondActive)
 		{
 			//Back to menu
-			printMenu(true, false, false, false);
+			printMenu(true, false, false, false, false, false);
 		}
 
 	}

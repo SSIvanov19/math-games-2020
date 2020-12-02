@@ -16,6 +16,6 @@ int main()
     while (true)
     {
     	//print menu
-        printMenu(true, false, false, false);
+        printMenu(true, false, false, false, false, false);
     }
 }
