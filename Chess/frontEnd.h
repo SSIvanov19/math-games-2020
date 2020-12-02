@@ -9,3 +9,5 @@ void printBoard(bool, std::string error = "noProblem");
 void newGame();
 void printAbout();
 void printHowToPlay();
+void playerOneWin();
+void playerTwoWin();

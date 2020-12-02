@@ -13,14 +13,14 @@ using namespace std;
 char whiteFig[2][8] =
 {
 	{'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
-	{'T', 'H', 'O', 'Q', 'K', 'O', 'H', 'T'}
+	{'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}
 };
 
 //Two-dimensional array that hold 
 //all black figures
 char blackFig[2][8] =
 {
-	{'t', 'h', 'o', 'q', 'k', 'o', 'h', 't'},
+	{'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
 	{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'}
 };
 
@@ -1490,19 +1490,19 @@ void printBoard(bool firstGame, string error)
 
 
 					//Make the Rockado
-					if (board[x][y] == 'K' && board[x][y + 1] == 'T')
+					if (board[x][y] == 'K' && board[x][y + 1] == 'R')
 					{
 						swap(board[x][y + 1], board[x][y - 1]);
 					}
-					else if (board[x][y] == 'k' && board[x][y + 1] == 't')
+					else if (board[x][y] == 'k' && board[x][y + 1] == 'r')
 					{
 						swap(board[x][y + 1], board[x][y - 1]);
 					}
-					else if (board[x][y] == 'K' && board[x][y - 2] == 'T')
+					else if (board[x][y] == 'K' && board[x][y - 2] == 'R')
 					{
 						swap(board[x][y - 2], board[x][y + 1]);
 					}
-					else if (board[x][y] == 'k' && board[x][y - 2] == 't')
+					else if (board[x][y] == 'k' && board[x][y - 2] == 'r')
 					{
 						swap(board[x][y - 2], board[x][y + 1]);
 					}
@@ -1531,6 +1531,71 @@ void printBoard(bool firstGame, string error)
 		printBoard(false);
 	}
 }
+
+void playerOneWin()
+{
+	//Return board to normal
+	newGame();
+	
+	//Clear screen
+	system("CLS");
+
+	//Print the winner
+	cout << "==============================================================" << endl;
+	cout << "  _____  _      __     ________ _____     ____  _   _ ______ " << endl;
+	cout << " |  __ \\| |   /\\\\ \\   / /  ____|  __ \\   / __ \\| \\ | |  ____|" << endl;
+	cout << " | |__) | |  /  \\\\ \\_/ /| |__  | |__) | | |  | |  \\| | |__   " << endl;
+	cout << " |  ___/| | / /\\ \\    / |  __| |  _  /  | |  | | . \\ |  __|  " << endl;
+	cout << " | |    | |/ ____ \\| |  | |____| | \\ \\  | |__| | |\\  | |____ " << endl;
+	cout << " |_|    |_/_/    \\_\\_|  |______|_|__\\_\\  \\____/|_| \\_|______|" << endl;
+	cout << "                  \\ \\        / / __ \\| \\ | |                 " << endl;
+	cout << "                   \\ \\  /\\  / / |  | |  \\| |                 " << endl;
+	cout << "                    \\ \\/  \\/ /| |  | | . \\ |                 " << endl;
+	cout << "                     \\  /\\  / | |__| | |\\  |                 " << endl;
+	cout << "                      \\/  \\/   \\____/|_| \\_|                 " << endl;
+	cout << "==============================================================" << endl;
+
+	//Wait for input
+	const char ch = _getch();
+
+	if (ch == '\r' || ch == '\x1b')
+	{
+		printMenu(true, false, false, false, false, false);
+	}
+}
+
+void playerTwoWin()
+{
+	//Return board to normal
+	newGame();
+	
+	//Clear screen
+	system("CLS");
+	
+	//Print the winner
+	cout << "====================================================================" << endl;
+	cout << "  _____  _      __     ________ _____    _________          ______  " << endl;
+	cout << " |  __ \\| |   /\\\\ \\   / /  ____|  __ \\  |__   __\\ \\        / / __ \\ " << endl;
+	cout << " | |__) | |  /  \\\\ \\_/ /| |__  | |__) |    | |   \\ \\  /\\  / / |  | |" << endl;
+	cout << " |  ___/| | / /\\ \\\\   / |  __| |  _  /     | |    \\ \\/  \\/ /| |  | |" << endl;
+	cout << " | |    | |/ ____ \\| |  | |____| | \\ \\     | |     \\  /\\  / | |__| |" << endl;
+	cout << " |_|    |_/_/    \\_\\_|  |______|_|__\\_\\   _|_|      \\/  \\/   \\____/ " << endl;
+	cout << "                  \\ \\        / / __ \\| \\ | |                        " << endl;
+	cout << "                   \\ \\  /\\  / / |  | |  \\| |                        " << endl;
+	cout << "                    \\ \\/  \\/ /| |  | | . \\ |                        " << endl;
+	cout << "                     \\  /\\  / | |__| | |\\  |                        " << endl;
+	cout << "                      \\/  \\/   \\____/|_| \\_|                        " << endl;
+	cout << "====================================================================" << endl;
+
+	//Wait for input
+	const char ch = _getch();
+
+	if (ch == '\r' || ch == '\x1b')
+	{
+		printMenu(true, false, false, false, false, false);
+	}
+}
+
 
 void printAbout()
 {
