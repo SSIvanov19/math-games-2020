@@ -7,9 +7,15 @@ FIELD** table = new FIELD * [TableSize];
 
 class Piece* CurrentFigure = NULL;
 class Piece* AnotherFigure = NULL;
+class King* KingFigure = NULL;
+class Rook* RookFigure = NULL;
 struct Piece::POSITION* possible;
 struct Piece::POSITION pos;
-short i, n, choise;
+short i, n, choise, WhiteRockade = false, BlackRockade = false;
+bool WhiteKingHasBeenMove = false;
+bool LeftWhiteRookHasBeenMove = false, RightWhiteRookHasBeenMove = false;
+bool BlackKingHasBeenMove = false;
+bool LeftBlackRookHasBeenMove = false, RightBlackRookHasBeenMove = false;
 bool EndOfGame = false, ChoiseEnd = true;
 string ColorTurn = "White";
 
@@ -488,86 +494,147 @@ string checkPos(int prevX, int prevY, int x, int y)
     temp1 = y;
     y = 7 - x;
 
-do
-{
     do
     {
-        //(ColorTurn == "White") ? cout << "White's turn" << endl : cout << "Black's turn" << endl;
-        // cout << "Please enter row and column, where the figure is placed:";
-
-        row = temp2;
-        column = prevY;
-
-        if ((row < 0) || (column < 0))
+        do
         {
-            EndOfGame = true;
-            break;
-        }
+            //(ColorTurn == "White") ? cout << "White's turn" << endl : cout << "Black's turn" << endl;
+            // cout << "Please enter row and column, where the figure is placed:";
 
-        if (table[row][column].placed == NULL) {
-            return "There is no figure in this field";
-            continue;
-        }
+            row = temp2;
+            column = prevY;
 
-        CurrentFigure = table[row][column].placed;
-        possible = NULL;
-        CurrentFigure->GetPossibleMoves(&possible, n);
-        //cout << endl;
-        //cout << "Color Turn = " << ColorTurn << endl;
-        //cout << "Figure Number = " << CurrentFigure->GetNumber() << endl;
-        //cout << "Posible moves: " << n << endl;
+            if ((row < 0) || (column < 0))
+            {
+                EndOfGame = true;
+                break;
+            }
 
-        //for (i = 0; i < n; i++)
-            //cout << "row: " << possible[i].row << ", column: " << possible[i].column << endl;
-        if (n == 0) {
-            return "This figure can't make a move";
-        }
-        else {
-            if (ColorTurn == "White" && CurrentFigure->GetNumber() < 16) {
-                if (CurrentFigure == NULL)
-                    return "This field is empty";
-                else
-                    break;
+            if (table[row][column].placed == NULL) {
+                return "There is no figure in this field";
+                continue;
+            }
+
+            CurrentFigure = table[row][column].placed;
+            possible = NULL;
+            CurrentFigure->GetPossibleMoves(&possible, n);
+            //cout << endl;
+            //cout << "Color Turn = " << ColorTurn << endl;
+            //cout << "Figure Number = " << CurrentFigure->GetNumber() << endl;
+            //cout << "Posible moves: " << n << endl;
+
+            //for (i = 0; i < n; i++)
+                //cout << "row: " << possible[i].row << ", column: " << possible[i].column << endl;
+            if (n == 0) {
+                return "This figure can't make a move";
             }
             else {
-                if (ColorTurn == "Black" && CurrentFigure->GetNumber() > 16) {
+                if (ColorTurn == "White" && CurrentFigure->GetNumber() < 16) {
                     if (CurrentFigure == NULL)
                         return "This field is empty";
                     else
                         break;
                 }
                 else {
-                    return "Take the right figure";
-                    continue;
+                    if (ColorTurn == "Black" && CurrentFigure->GetNumber() > 16) {
+                        if (CurrentFigure == NULL)
+                            return "This field is empty";
+                        else
+                            break;
+                    }
+                    else {
+                        return "Take the right figure";
+                        continue;
+                    }
                 }
             }
-        }
-    } while (true);
-    if (EndOfGame)
-        break;
-    possible = NULL;
-    CurrentFigure->GetPossibleMoves(&possible, n);
-
-    do
-    {
-        //cout << "Please enter row and column, where the figure will be moved:";
-        pos.row = temp1;
-        pos.column = y;
-
-        for (i = 0; i < n; i++)
-        {
-            if ((possible[i].row == pos.row) && (possible[i].column == pos.column))
-                break;
-        } // for i ...
-        if (i >= n)
-            return "This move is impossible";
-        else
+        } while (true);
+        if (EndOfGame)
             break;
-    } while (true);
+        possible = NULL;
+        CurrentFigure->GetPossibleMoves(&possible, n);
+        short number = CurrentFigure->GetNumber();
+        do
+        {
+            //cout << "Please enter row and column, where the figure will be moved:";
+            pos.row = temp1;
+            pos.column = y;
+
+            for (i = 0; i < n; i++)
+            {
+                if ((possible[i].row == pos.row) && (possible[i].column == pos.column))
+                    break;
+            } // for i ...
+
+            if (CurrentFigure->GetKind() == KING && CurrentFigure->GetColor() == White) {
+                if (WhiteKingHasBeenMove == false) {
+                    if (LeftWhiteRookHasBeenMove == false || RightWhiteRookHasBeenMove == false) {
+                        if (pos.row == 6 && pos.column == 0) {
+                            figures[0] = new class King(White, KING, number, pos.row, pos.column, table);
+                            figures[2] = new class Rook(White, QUEEN, number, pos.row - 1, pos.column, table);
+                            RightWhiteRookHasBeenMove = true;
+                            WhiteRockade = true;
+                            break;
+                        }
+                        if (pos.row == 2 && pos.column == 0) {
+                            figures[0] = new class King(White, KING, number, pos.row, pos.column, table);
+                            figures[3] = new class Rook(White, QUEEN, number, pos.row + 1, pos.column, table);
+                            LeftWhiteRookHasBeenMove = true;
+                            WhiteRockade = true;
+                            break;
+                        }
+                    }
+                }
+                if (i >= n)
+                    return "This move is impossible";
+                else {
+                    WhiteKingHasBeenMove = true;
+                    break;
+                }
+
+            }
+
+            if (CurrentFigure->GetKind() == KING && CurrentFigure->GetColor() == Black) {
+                if (BlackKingHasBeenMove == false) {
+                    if (LeftBlackRookHasBeenMove == false || RightBlackRookHasBeenMove == false) {
+                        if (pos.row == 6 && pos.column == 7) {
+                            figures[16] = new class King(Black, KING, number, pos.row, pos.column, table);
+                            figures[18] = new class Rook(Black, QUEEN, number, pos.row - 1, pos.column, table);
+                            RightBlackRookHasBeenMove = true;
+                            BlackRockade = true;
+                        }
+                        if (pos.row == 2 && pos.column == 7) {
+                            figures[16] = new class King(Black, KING, number, pos.row, pos.column, table);
+                            figures[19] = new class Rook(Black, QUEEN, number, pos.row + 1, pos.column, table);
+                            LeftBlackRookHasBeenMove = true;
+                            BlackRockade = true;
+                        }
+                    }
+                }
+                if (i >= n)
+                    return "This move is impossible";
+                else {
+                    BlackKingHasBeenMove = true;
+                    break;
+                }
+            } else {
+                if (i >= n)
+                    return "This move is impossible";
+                else
+                    break;
+            }
+        } while (true);
         if (possible != NULL)
             delete possible;
         if (EndOfGame)
             break;
+        /*
+        if (WhiteRockade) {
+            (ColorTurn == "White") ? ColorTurn = "Black" : ColorTurn = "White";
+            WhiteRockade = false;
+            continue;
+        }
+        */
         AnotherFigure = table[pos.row][pos.column].placed;
         if (AnotherFigure != NULL)
         {
@@ -580,7 +647,6 @@ do
         CurrentFigure->MakeMove(pos);
         pos.row = -1;
         pos.column = -1;
-        short number = CurrentFigure->GetNumber();
         pos = CurrentFigure->GetPosition();
         //cout << "Now the figure is on field: " << pos.row + 1 << ", " << pos.column + 1 << endl;
         /*
@@ -642,7 +708,7 @@ void initBackEnd()
     } // for row...
 
     class Piece* figures[32];
-    figures[0] = new class King(White, KING, 1, 0, 7, table);
+    figures[0] = new class King(White, KING, 1, 4, 0, table);
     figures[1] = new class Queen(White, QUEEN, 2, 3, 0, table);
     figures[2] = new class Rook(White, ROOK, 3, 7, 0, table);
     figures[3] = new class Rook(White, ROOK, 4, 0, 0, table);
@@ -656,7 +722,7 @@ void initBackEnd()
     figures[16] = new class King(Black, KING, 17, 4, 7, table);
     figures[17] = new class Queen(Black, QUEEN, 18, 3, 7, table);
     figures[18] = new class Rook(Black, ROOK, 19, 7, 7, table);
-    figures[19] = new class Rook(Black, ROOK, 20, 4, 0, table);
+    figures[19] = new class Rook(Black, ROOK, 20, 0, 7, table);
     figures[20] = new class Bishop(Black, BISHOP, 21, 2, 7, table);
     figures[21] = new class Bishop(Black, BISHOP, 22, 5, 7, table);
     figures[22] = new class Knight(Black, KNIGHT, 23, 1, 7, table);
