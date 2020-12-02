@@ -695,7 +695,7 @@ string checkPos(int prevX, int prevY, int x, int y)
         pos.row = -1;
         pos.column = -1;
         pos = CurrentFigure->GetPosition();
-        /*
+        
         if (CurrentFigure->GetKind() == PAWN) {
             if (pos.column == 7) {
                 cout << "What figure you want?" << endl;
@@ -704,11 +704,11 @@ string checkPos(int prevX, int prevY, int x, int y)
                 do {
                     cin >> choise;
                     switch (choise) {
-                    case 1: figures[number - 1] = new class Queen(White, QUEEN, number, pos.row, 7, table); ChoiseEnd = false; break;
-                    case 2: figures[number - 1] = new class Rook(White, ROOK, number, pos.row, 7, table); ChoiseEnd = false; break;
-                    case 3: figures[number - 1] = new class Bishop(White, BISHOP, number, pos.row, 7, table); ChoiseEnd = false; break;
-                    case 4: figures[number - 1] = new class Knight(White, KNIGHT, number, pos.row, 7, table); ChoiseEnd = false; break;
-                    default: return "Invalid number";
+                    case 1: figures[number - 1] = new class Queen(White, QUEEN, number, pos.row, 7, table); ChoiseEnd = false; makePawnInFig(1, pos.row, 'Q'); break;
+                    case 2: figures[number - 1] = new class Rook(White, ROOK, number, pos.row, 7, table); ChoiseEnd = false; makePawnInFig(1, pos.row, 'R'); break;
+                    case 3: figures[number - 1] = new class Bishop(White, BISHOP, number, pos.row, 7, table); ChoiseEnd = false; makePawnInFig(1, pos.row, 'B'); break;
+                    case 4: figures[number - 1] = new class Knight(White, KNIGHT, number, pos.row, 7, table); ChoiseEnd = false; makePawnInFig(1, pos.row, 'n'); break;
+                    default: cout << "Invalid number" << endl;
                     }
                 } while (ChoiseEnd);
 
@@ -722,17 +722,17 @@ string checkPos(int prevX, int prevY, int x, int y)
                 do {
                     cin >> choise;
                     switch (choise) {
-                    case 1: figures[number - 1] = new class Queen(White, QUEEN, number, pos.row, 0, table); ChoiseEnd = false; break;
-                    case 2: figures[number - 1] = new class Rook(White, ROOK, number, pos.row, 0, table); ChoiseEnd = false; break;
-                    case 3: figures[number - 1] = new class Bishop(White, BISHOP, number, pos.row, 0, table); ChoiseEnd = false; break;
-                    case 4: figures[number - 1] = new class Knight(White, KNIGHT, number, pos.row, 0, table); ChoiseEnd = false; break;
-                    default: return "Invalid number";
+                    case 1: figures[number - 1] = new class Queen(White, QUEEN, number, pos.row, 0, table); ChoiseEnd = false; makePawnInFig(6, pos.row, 'q'); break;
+                    case 2: figures[number - 1] = new class Rook(White, ROOK, number, pos.row, 0, table); ChoiseEnd = false; makePawnInFig(6, pos.row, 'r'); break;
+                    case 3: figures[number - 1] = new class Bishop(White, BISHOP, number, pos.row, 0, table); ChoiseEnd = false; makePawnInFig(6, pos.row, 'b'); break;
+                    case 4: figures[number - 1] = new class Knight(White, KNIGHT, number, pos.row, 0, table); ChoiseEnd = false; makePawnInFig(6, pos.row, 'n'); break;
+                    default: cout << "Invalid number" << endl;
                     }
                 } while (ChoiseEnd);
 
             }
         }
-        */
+        
         if (BlackWin >= 3) {
             playerOneWin();
             break;

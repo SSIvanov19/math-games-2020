@@ -11,3 +11,4 @@ void printAbout();
 void printHowToPlay();
 void playerOneWin();
 void playerTwoWin();
+void makePawnInFig(int, int, char);

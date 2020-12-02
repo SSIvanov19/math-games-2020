@@ -1914,6 +1914,13 @@ void printSettings(bool firstActive, bool secondActive)
 	}
 }
 
+//Make pawn in another fig
+void makePawnInFig(int x, int y, char ch)
+{
+	board[x][y] = ch;
+}
+
+
 //Return board back to start
 void newGame()
 {
