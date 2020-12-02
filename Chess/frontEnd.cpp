@@ -1480,10 +1480,21 @@ void printBoard(bool firstGame, string error)
 				//Check and place piece
 				if (checkPos(saveX, saveY, x, y) == "noProblem")
 				{
+					if (board[x][y] == 'K')
+					{
+						playerTwoWin();
+					}
+
+					if (board[x][y] == 'k')
+					{
+						playerOneWin();
+					}
+					
 					if (board[x][y] != 32)
 					{
 						board[x][y] = 32;
 					}
+
 					
 					//Swap the two fig
 					swap(board[saveX][saveY], board[x][y]);
@@ -1510,17 +1521,6 @@ void printBoard(bool firstGame, string error)
 					turn = !turn;
 					selectFirst = false;
 				}
-				/*
-				 * 
-				else if(checkPos(saveX, saveY, x, y) == "White Win")
-				{
-					playerOneWin();
-				}
-				else if (checkPos(saveX, saveY, x, y) == "Black Win")
-				{
-					playerTwoWin();
-				}
-				 */
 				else
 				{
 					string error = checkPos(saveX, saveY, x, y);
