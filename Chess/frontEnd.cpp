@@ -1510,6 +1510,17 @@ void printBoard(bool firstGame, string error)
 					turn = !turn;
 					selectFirst = false;
 				}
+				/*
+				 * 
+				else if(checkPos(saveX, saveY, x, y) == "White Win")
+				{
+					playerOneWin();
+				}
+				else if (checkPos(saveX, saveY, x, y) == "Black Win")
+				{
+					playerTwoWin();
+				}
+				 */
 				else
 				{
 					string error = checkPos(saveX, saveY, x, y);
@@ -1910,6 +1921,7 @@ void newGame()
 	initBackEnd();
 
 	turn = 1;
+	selectFirst = false;
 	
 	//Standard board
 	char standardBoard[8][8] =

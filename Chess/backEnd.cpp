@@ -12,7 +12,7 @@ class Rook* RookFigure = NULL;
 struct Piece::POSITION* possible;
 struct Piece::POSITION pos;
 short i, n, choise, WhiteRockade = false, BlackRockade = false;
-short WhiteWin = 0, BlackWin = 0;
+short WhiteWin = -2, BlackWin = -2;
 bool WhiteKingHasBeenMove = false;
 bool LeftWhiteRookHasBeenMove = false, RightWhiteRookHasBeenMove = false;
 bool BlackKingHasBeenMove = false;
@@ -527,12 +527,12 @@ string checkPos(int prevX, int prevY, int x, int y)
             if (n == 0) {
                 (ColorTurn == "White") ? ++WhiteWin : ++BlackWin;
                 if (BlackWin >= 3) {
-                    return "White Win";
+                    playerOneWin();
                     break;
                 }
 
                 if (WhiteWin >= 3) {
-                    return "Black Win";
+                    playerTwoWin();
                     break;
                 }
                 return "1 - This figure can't make a move";
@@ -554,12 +554,12 @@ string checkPos(int prevX, int prevY, int x, int y)
                     else {
                         (ColorTurn == "White") ? WhiteWin++ : BlackWin++;
                         if (BlackWin >= 3) {
-                            return "White Win";
+                            playerOneWin();
                             break;
                         }
 
                         if (WhiteWin >= 3) {
-                            return "Black Win";
+                            playerTwoWin();
                             break;
                         }
                         return "2 - Take the right figure";
@@ -608,12 +608,12 @@ string checkPos(int prevX, int prevY, int x, int y)
                 if (i >= n) {
                     (ColorTurn == "White") ? ++WhiteWin : ++BlackWin;
                     if (BlackWin >= 3) {
-                        return "White Win";
+                        playerOneWin();
                         break;
                     }
 
                     if (WhiteWin >= 3) {
-                        return "Black Win";
+                        playerTwoWin();
                         break;
                     }
                     return "3 -This move is impossible";
@@ -646,12 +646,12 @@ string checkPos(int prevX, int prevY, int x, int y)
                 if (i >= n) {
                     (ColorTurn == "White") ? ++WhiteWin : ++BlackWin;
                     if (BlackWin >= 3) {
-                        return "White Win";
+                        playerOneWin();
                         break;
                     }
 
                     if (WhiteWin >= 3) {
-                        return "Black Win";
+                        playerTwoWin();
                         break;
                     }
                     return "4 - This move is impossible";
@@ -734,12 +734,12 @@ string checkPos(int prevX, int prevY, int x, int y)
         }
         */
         if (BlackWin >= 3) {
-            return "White Win";
+            playerOneWin();
             break;
         }
 
         if (WhiteWin >= 3) {
-            return "Black Win";
+            playerTwoWin();
             break;
         }
 
@@ -786,4 +786,6 @@ void initBackEnd()
         figures[i] = new class Pawn(Black, PAWN, i + 1, i - 24, 6, table);
 
     ColorTurn = "White";
+    WhiteWin = -2;
+	BlackWin = -2;
 }
