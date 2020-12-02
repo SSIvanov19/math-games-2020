@@ -172,23 +172,27 @@ bool Rook::CheckMove(struct POSITION pos)
     if (row == pos.row)
     { // move in order:
         step = (pos.column > column) ? 1 : -1;
-        for (column += step; table[row][column].placed == NULL; column += step)
+        for (column += step; ; column += step)
         {
             if (column == pos.column)
                 return true;
+            if (table[row][column].placed != NULL)
+                return false;
         } // for ... column
-        return false; // attempt to skip a figure
+
     }
 
     if (column == pos.column)
     { // ход по колоната: 
         step = (pos.row > row) ? 1 : -1;
-        for (row += step; table[row][column].placed == NULL; row += step)
+        for (row += step; ; row += step)
         {
             if (row == pos.row)
                 return true;
+            if (table[row][column].placed != NULL)
+                return false;
         } // for ... row
-        return false; // attempt to skip a figure
+
     }
 
     return true;
@@ -333,14 +337,14 @@ bool Bishop::CheckMove(struct POSITION pos)
         // check if there is no figure in the fields between what the figure is on and what is being moved
         RowStep = (pos.row > row) ? 1 : -1;
         ColumnStep = (pos.column > column) ? 1 : -1;
-        for (row += RowStep, column += ColumnStep; table[row][column].placed == NULL; row += RowStep, column += ColumnStep)
+        for (row += RowStep, column += ColumnStep; ; row += RowStep, column += ColumnStep)
         {
             if (row == pos.row)
                 return true;
+            if (table[row][column].placed != NULL)
+                return false;
         } // for ...
-        return false; // attempt to skip a figure
     }
-
     return true;
 } // Bishop::CheckMove
 
@@ -415,37 +419,40 @@ bool Queen::CheckMove(struct POSITION pos)
     // move diagonally:
     if ((row + column == pos.row + pos.column) || (row - column == pos.row - pos.column))
     { // the field on which the figure is and the one on which the move is made are on the same diagonal
-      // check if there is no figure in the fields between what the figure is on and what is being moved  
+        // check if there is no figure in the fields between what the figure is on and what is being moved
         RowStep = (pos.row > row) ? 1 : -1;
         ColumnStep = (pos.column > column) ? 1 : -1;
-        for (row += RowStep, column += ColumnStep; table[row][column].placed == NULL; row += RowStep, column += ColumnStep)
+        for (row += RowStep, column += ColumnStep; ; row += RowStep, column += ColumnStep)
         {
             if (row == pos.row)
                 return true;
+            if (table[row][column].placed != NULL)
+                return false;
         } // for ...
-        return false; // attempt to skip a figure
     }
 
     if (row == pos.row)
-    { // move in a order:
+    { // move in order:
         step = (pos.column > column) ? 1 : -1;
-        for (column += step; table[row][column].placed == NULL; column += step)
+        for (column += step; ; column += step)
         {
             if (column == pos.column)
                 return true;
+            if (table[row][column].placed != NULL)
+                return false;
         } // for ... column
-        return false; // attempt to skip a figure
     }
 
     if (column == pos.column)
-    { // move in a column: 
+    { // move in column: 
         step = (pos.row > row) ? 1 : -1;
-        for (row += step; table[row][column].placed == NULL; row += step)
+        for (row += step; ; row += step)
         {
             if (row == pos.row)
                 return true;
+            if (table[row][column].placed != NULL)
+                return false;
         } // for ... row
-        return false; // attempt to skip a figure
     }
 
 } // Queen::CheckMove
@@ -489,7 +496,7 @@ void Queen::GetPossibleMoves(struct POSITION** pos, short& n)
 string checkPos(int prevX, int prevY, int x, int y)
 {
     short temp1, temp2;
-	
+
     temp2 = prevY;
     prevY = 7 - prevX;
     temp1 = y;
@@ -707,7 +714,7 @@ string checkPos(int prevX, int prevY, int x, int y)
         }
         */
         (ColorTurn == "White") ? ColorTurn = "Black" : ColorTurn = "White";
-    	
+
         return "noProblem";
     } while (true);
 }
