@@ -22,8 +22,8 @@ git clone https://github.com/SSIvanov19/math-games-2020.git
 
 
 # Documentation
-### For the documentation click [here](https://codingburgas-my.sharepoint.com/:w:/g/personal/shhristov19_codingburgas_bg/EXVZiNm62CRBiUadhiKN0HQBa9BGqjJM9VPR0HbS4notUw?e=JchDXE)
-### For the presentation click [here](https://codingburgas-my.sharepoint.com/:p:/g/personal/shhristov19_codingburgas_bg/Ea1yEpa5M7tHspi9Wqn6OFwBZj1RJPCj2p6nXyU0SfmjWw?e=6tBu7E)
+### For the documentation and presentation click [here](https://github.com/SSIvanov19/math-games-2020/wiki/Documentation)
+
 # Interface
 ![General UI.](https://imgur.com/8YQ59rk.png)
 - You can use _New Game_ to start a new Chess game
