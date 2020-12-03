@@ -19,6 +19,12 @@ git init
 git clone https://github.com/SSIvanov19/math-games-2020.git 
 ```
 * And do whatever you want with the code !
+
+
+# Documentation
+### For the documentation click [here](https://codingburgas-my.sharepoint.com/:w:/g/personal/shhristov19_codingburgas_bg/EXVZiNm62CRBiUadhiKN0HQBa9BGqjJM9VPR0HbS4notUw?e=JchDXE)
+### For the presentation click [here]()
+
 # Interface
 ![General UI.](https://i.imgur.com/eEUCXiW.png)
 - You can use _New Game_ to start a new Chess game
@@ -34,5 +40,3 @@ git clone https://github.com/SSIvanov19/math-games-2020.git
 ![Move with coordinates](https://i.imgur.com/yBqmQOF.png)
 ### After you have played a little your board may or may not look like this one :
 ![Example Board](https://i.imgur.com/73g90iI.png)
-
-
