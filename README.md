@@ -11,11 +11,14 @@ Stas Uzunov - [SSUzunov19](https://github.com/SSUzunov19) - C++ Developer
 Stefan Hristov - [SHHristov19](https://github.com/SHHristov19) - Scrum Trainer  
 
 # Installation
+Go to [Realease](https://github.com/SSIvanov19/math-games-2020/releases) and download the last release.
+### If you want to download the source code :
+* Go to your terminal
 ```bash
 git init
 git clone https://github.com/SSIvanov19/math-games-2020.git 
 ```
-And you are done!
+* And do whatever you want with the code !
 # Interface
 ![General UI.](https://i.imgur.com/eEUCXiW.png)
 - You can use _New Game_ to start a new Chess game
