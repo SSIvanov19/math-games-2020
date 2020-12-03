@@ -11,17 +11,28 @@ Stas Uzunov - [SSUzunov19](https://github.com/SSUzunov19) - C++ Developer
 Stefan Hristov - [SHHristov19](https://github.com/SHHristov19) - Scrum Trainer  
 
 # Installation
+Go to [Realease](https://github.com/SSIvanov19/math-games-2020/releases) and download the last release.
+### If you want to download the source code :
+* Go to your terminal
 ```bash
 git init
 git clone https://github.com/SSIvanov19/math-games-2020.git 
 ```
-And you are done!
+* And do whatever you want with the code !
+
+
+# Documentation
+### For the documentation click [here](https://codingburgas-my.sharepoint.com/:w:/g/personal/shhristov19_codingburgas_bg/EXVZiNm62CRBiUadhiKN0HQBa9BGqjJM9VPR0HbS4notUw?e=JchDXE)
+### For the presentation click [here]()
+
 # Interface
-![General UI.](https://i.imgur.com/eEUCXiW.png)
+![General UI.](https://imgur.com/8YQ59rk.png)
 - You can use _New Game_ to start a new Chess game
 - You can use _Resume Game_ to resume the game that you already have started
 - You can use _Settings_ to choose whether you want to play with your keyboard or by typing coordinates 
 ![Settings UI](https://i.imgur.com/dPnmitw.png)
+- You can use _How to play_ to see how to play
+- You can use _About_ to see more about our game
 - You can use _Exit_ to exit the program
 # Usage 
 #### Once you choose _New Game_ from the menu, you are directed to the board
@@ -31,5 +42,3 @@ And you are done!
 ![Move with coordinates](https://i.imgur.com/yBqmQOF.png)
 ### After you have played a little your board may or may not look like this one :
 ![Example Board](https://i.imgur.com/73g90iI.png)
-
-
