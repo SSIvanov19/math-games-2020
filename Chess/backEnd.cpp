@@ -184,7 +184,7 @@ bool Rook::CheckMove(struct POSITION pos)
     }
 
     if (column == pos.column)
-    { // ход по колоната: 
+    { // Move in column: 
         step = (pos.row > row) ? 1 : -1;
         for (row += step; ; row += step)
         {
