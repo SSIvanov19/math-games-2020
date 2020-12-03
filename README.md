@@ -26,11 +26,13 @@ git clone https://github.com/SSIvanov19/math-games-2020.git
 ### For the presentation click [here]()
 
 # Interface
-![General UI.](https://i.imgur.com/eEUCXiW.png)
+![General UI.](https://imgur.com/8YQ59rk.png)
 - You can use _New Game_ to start a new Chess game
 - You can use _Resume Game_ to resume the game that you already have started
 - You can use _Settings_ to choose whether you want to play with your keyboard or by typing coordinates 
 ![Settings UI](https://i.imgur.com/dPnmitw.png)
+- You can use _How to play_ to see how to play
+- You can use _About_ to see more about our game
 - You can use _Exit_ to exit the program
 # Usage 
 #### Once you choose _New Game_ from the menu, you are directed to the board
